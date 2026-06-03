@@ -1,0 +1,34 @@
+{
+  "name": "brainsrs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "lint": "eslint",
+    "test": "npm run test:backend && npm run test:ui && npm run test:library && npm run test:review-filter && npm run test:theme",
+    "test:backend": "node scripts/validate-backend.mjs",
+    "test:ui": "node scripts/validate-ui.mjs",
+    "test:library": "node scripts/validate-library.mjs",
+    "test:review-filter": "node scripts/validate-review-filter.mjs",
+    "test:theme": "node scripts/validate-theme-pages.mjs"
+  },
+  "dependencies": {
+    "lucide-react": "latest",
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "latest",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "eslint": "latest",
+    "eslint-config-next": "latest",
+    "playwright-core": "^1.60.0",
+    "tailwindcss": "latest",
+    "typescript": "latest"
+  }
+}
