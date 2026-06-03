@@ -1,6 +1,8 @@
 import { exampleContent, origin } from "./test-helpers.mjs";
 
-const email = `backend-${Date.now()}@example.com`;
+const runId = Date.now();
+const email = `backend-${runId}@example.com`;
+const existingNotebookId = `nb-existing-before-import-${runId}`;
 const registration = await fetch(`${origin}/api/auth/register`, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
@@ -35,9 +37,24 @@ await post(
   },
   400,
 );
+await post({
+  type: "addNotebook",
+  notebook: {
+    id: existingNotebookId,
+    name: "Caderno Existente",
+    description: "Conteúdo criado antes da importação.",
+    color: "#58cc02",
+  },
+});
 await post({ type: "import", confirmReplace: true, content: exampleContent });
 
 let state = await getState();
+if (!state.notebooks.some((notebook) => notebook.id === existingNotebookId)) {
+  throw new Error("Import removed existing notebook.");
+}
+if (state.notebooks.length < 2) {
+  throw new Error(`Import should merge content, received ${state.notebooks.length} notebooks.`);
+}
 const question = state.questions[0];
 const correct = question.alternatives.find((alternative) => alternative.isCorrect);
 await post(
@@ -69,4 +86,4 @@ state = await getState();
 if (state.activeReviewSession !== null) throw new Error("Review session was not completed.");
 if (state.logs.length !== 1) throw new Error("Retry created a duplicate review log.");
 
-console.log("Backend validation passed: schemas -> protected reset -> review session -> idempotent retry");
+console.log("Backend validation passed: schemas -> protected reset -> merged import -> review session -> idempotent retry");

@@ -482,7 +482,7 @@ export function BrainSrsApp() {
 
   const importContent = (incoming: ContentImport) => {
     void commitAction({ type: "import", content: incoming, confirmReplace: true })
-      .then(() => showToast("Conteúdo importado. O progresso foi reiniciado."))
+      .then(() => showToast("Conteúdo importado e adicionado à biblioteca."))
       .catch((error: unknown) => {
         showToast(error instanceof Error ? error.message : "Falha ao importar conteúdo.");
       });
@@ -2729,8 +2729,8 @@ function ImportFormatModal({
           </pre>
         </div>
         <div className="mt-5 rounded-xl bg-[#fff7e7] px-3 py-3 text-[11px] font-bold leading-5 text-[#9a630f]">
-          Importar substitui a biblioteca atual. Depois de escolher o arquivo, você ainda verá uma
-          confirmação final antes de aplicar a mudança.
+          Importar adiciona novos cadernos, matérias e questões à biblioteca atual. Depois de
+          escolher o arquivo, você verá uma confirmação final antes de aplicar a mudança.
         </div>
         <div className="mt-5 flex flex-col justify-end gap-2 sm:flex-row">
           <button
@@ -2786,13 +2786,13 @@ function ImportConfirmationModal({
           <AlertTriangle size={23} />
         </div>
         <p className="mt-4 text-[10px] font-extrabold uppercase tracking-[1.6px] text-[#ff4b4b]">
-          Atenção: substituição completa
+          Atenção: nova importação
         </p>
         <h2 id="import-confirmation-title" className="mt-1 text-lg font-extrabold text-[#303a4f]">
-          Substituir sua biblioteca?
+          Adicionar conteúdo importado?
         </h2>
         <p className="mt-3 text-[12px] font-semibold leading-5 text-[#7c8695]">
-          A importação substituirá todo o conteúdo atual. O progresso, os cooldowns e o histórico de revisões existentes serão removidos.
+          A importação manterá sua biblioteca atual e adicionará novos cadernos, matérias e questões. O progresso e o histórico existentes serão preservados.
         </p>
         <div className="mt-4 grid grid-cols-2 gap-3 text-center">
           <div className="rounded-xl bg-[#fff8f8] px-3 py-3">
@@ -2809,7 +2809,7 @@ function ImportConfirmationModal({
           </div>
         </div>
         <p className="mt-4 text-[11px] font-bold text-[#687386]">
-          Esta ação não pode ser desfeita. Deseja continuar?
+          As questões importadas começarão com progresso zerado. Deseja continuar?
         </p>
         <div className="mt-6 flex justify-end gap-2">
           <button
@@ -2824,7 +2824,7 @@ function ImportConfirmationModal({
             type="button"
             onClick={onConfirm}
           >
-            <Upload size={14} /> Sim, substituir
+            <Upload size={14} /> Sim, importar
           </button>
         </div>
       </div>

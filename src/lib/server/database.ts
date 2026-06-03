@@ -581,24 +581,12 @@ function scopeImportedContent(content: ContentImport): ContentImport {
   };
 }
 
-function replaceContent(userId: string, content: ContentImport) {
+function importContent(userId: string, content: ContentImport) {
   const scopedContent = scopeImportedContent(content);
-  const initializedProgress = scopedContent.questions.reduce<Record<string, Progress>>(
-    (progress, question) => {
-      progress[question.id] = initialProgress(question.id);
-      return progress;
-    },
-    {},
-  );
-  writeState(userId, {
-    ...scopedContent,
-    progress: initializedProgress,
-    logs: [],
-    cooldown: [],
-    completedDates: [],
-    settings: getSettings(userId),
-    activeReviewSession: null,
-  });
+  abandonActiveReviewSessions(userId);
+  scopedContent.notebooks.forEach((notebook) => insertNotebook(userId, notebook));
+  scopedContent.subjects.forEach((subject) => insertSubject(userId, subject));
+  scopedContent.questions.forEach((question) => addQuestion(userId, question));
 }
 
 function addQuestion(userId: string, question: Question) {
@@ -1064,7 +1052,7 @@ export function executeAction(userId: string, action: AppAction) {
   const result = inTransaction(() => {
     switch (action.type) {
       case "import":
-        replaceContent(userId, action.content);
+        importContent(userId, action.content);
         return {};
       case "addNotebook":
         insertNotebook(userId, action.notebook);
