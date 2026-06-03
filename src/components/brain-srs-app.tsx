@@ -15,6 +15,7 @@ import {
   ChevronRight,
   CircleHelp,
   Clock3,
+  Copy,
   Download,
   FileText,
   Flame,
@@ -2682,6 +2683,18 @@ function ImportFormatModal({
   onClose: () => void;
   onChooseFile: () => void;
 }) {
+  const [copied, setCopied] = useState(false);
+
+  const copyExampleJson = async () => {
+    try {
+      await navigator.clipboard.writeText(importExampleJson);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1600);
+    } catch {
+      setCopied(false);
+    }
+  };
+
   return createPortal(
     <div className="fixed inset-0 z-[80] flex items-center justify-center bg-[#2f5f00]/45 p-4">
       <div
@@ -2722,7 +2735,18 @@ function ImportFormatModal({
             <span className="text-[10px] font-extrabold uppercase tracking-[1.2px] text-[#a8f08a]">
               exemplo.json
             </span>
-            <span className="text-[10px] font-bold text-[#9aa7bd]">JSON válido</span>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-bold text-[#9aa7bd]">JSON válido</span>
+              <button
+                aria-label="Copiar JSON de exemplo"
+                className="inline-flex size-7 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-[#c7d2e4] transition hover:border-[#a8f08a]/45 hover:bg-[#a8f08a]/10 hover:text-[#a8f08a]"
+                title="Copiar exemplo"
+                type="button"
+                onClick={() => void copyExampleJson()}
+              >
+                {copied ? <CheckCircle2 size={14} /> : <Copy size={14} />}
+              </button>
+            </div>
           </div>
           <pre className="max-h-[42vh] overflow-auto p-4 text-[11px] leading-5 text-[#eef4ff]">
             <code>{importExampleJson}</code>
