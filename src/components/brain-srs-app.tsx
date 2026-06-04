@@ -83,6 +83,7 @@ import {
 import { contentImportSchema } from "@/lib/validation";
 
 const cloneSeed = (): AppState => JSON.parse(JSON.stringify(seedState)) as AppState;
+const answerLabels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 type DeleteTarget =
   | { type: "notebook"; id: string; name: string; subjectCount: number; questionCount: number }
   | { type: "subject"; id: string; name: string; questionCount: number }
@@ -104,6 +105,31 @@ const pathPages = Object.entries(pagePaths).reduce<Record<string, PageId>>(
   {},
 );
 const getPageFromPathname = (pathname: string) => pathPages[pathname] ?? "dashboard";
+const hashSeed = (value: string) => {
+  let hash = 2166136261;
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+};
+const seededRandom = (seed: number) => {
+  let value = seed || 1;
+  return () => {
+    value = Math.imul(value ^ (value >>> 15), 1 | value);
+    value ^= value + Math.imul(value ^ (value >>> 7), 61 | value);
+    return ((value ^ (value >>> 14)) >>> 0) / 4294967296;
+  };
+};
+const shuffleAlternatives = (alternatives: Alternative[], seedKey: string) => {
+  const random = seededRandom(hashSeed(seedKey));
+  const shuffled = alternatives.map((alternative) => ({ ...alternative }));
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(random() * (index + 1));
+    [shuffled[index], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[index]];
+  }
+  return shuffled;
+};
 const localDay = (date = new Date()) => {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -646,6 +672,7 @@ export function BrainSrsApp() {
           {page === "review" && (
             <ReviewPage
               key={`${currentReviewQuestion?.id ?? "empty"}-${reviewIndex}`}
+              answerOrderSeed={reviewSessionId ?? "review"}
               cooldownCount={activeCooldown.length}
               nextCooldownAt={nextCooldownAt}
               scheduledReviewCount={scheduledReviews.length}
@@ -1488,6 +1515,7 @@ function StyledSelect({
 }
 
 function ReviewPage({
+  answerOrderSeed,
   question,
   state,
   dueQuestions,
@@ -1506,6 +1534,7 @@ function ReviewPage({
   onStart,
   onStudyNew,
 }: {
+  answerOrderSeed: string;
   question: Question | null;
   state: AppState;
   dueQuestions: Question[];
@@ -1528,6 +1557,17 @@ function ReviewPage({
   const [inspectedId, setInspectedId] = useState<string | null>(null);
   const [hintOpen, setHintOpen] = useState(false);
   const [savingAnswer, setSavingAnswer] = useState(false);
+  const displayedAlternatives = useMemo(
+    () =>
+      question
+        ? shuffleAlternatives(
+            question.alternatives,
+            `${answerOrderSeed}:${question.id}:${currentIndex}`,
+          )
+        : [],
+    [answerOrderSeed, currentIndex, question],
+  );
+
   if (!queueLength) {
     return (
       <ReviewSetup
@@ -1568,6 +1608,7 @@ function ReviewPage({
   const subject = state.subjects.find((item) => item.id === question.subjectId);
   const progress = state.progress[question.id];
   const selected = question.alternatives.find((item) => item.id === selectedId);
+  const alternativesToDisplay = displayedAlternatives.length ? displayedAlternatives : question.alternatives;
 
   const selectAnswer = (alternative: Alternative) => {
     setInspectedId(alternative.id);
@@ -1647,7 +1688,7 @@ function ReviewPage({
           )}
 
           <div className="mt-8 grid gap-3">
-            {question.alternatives.map((alternative) => {
+            {alternativesToDisplay.map((alternative, alternativeIndex) => {
               const answered = Boolean(selectedId);
               const chosen = selectedId === alternative.id;
               const inspected = inspectedId === alternative.id;
@@ -1667,7 +1708,7 @@ function ReviewPage({
                     onClick={() => selectAnswer(alternative)}
                   >
                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border-2 border-current text-[13px] font-extrabold opacity-75">
-                      {alternative.label}
+                      {answerLabels[alternativeIndex] ?? alternative.label}
                     </span>
                     <span className="flex-1 text-[14px] font-extrabold leading-6 sm:text-[15px]">
                       {alternative.text}
@@ -3947,14 +3988,27 @@ function SimulationPage({
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [hintOpen, setHintOpen] = useState(false);
   const [correct, setCorrect] = useState(0);
+  const [simulationRunSeed, setSimulationRunSeed] = useState("initial");
 
   const pool =
     source === "vulnerabilities"
       ? state.questions.filter((question) => state.progress[question.id]?.mistakes >= 3)
       : state.questions.filter((question) => question.subjectId === source);
+  const activeQuestion = queue[index] ?? null;
+  const displayedAlternatives = useMemo(
+    () =>
+      activeQuestion
+        ? shuffleAlternatives(
+            activeQuestion.alternatives,
+            `${simulationRunSeed}:${activeQuestion.id}:${index}`,
+          )
+        : [],
+    [activeQuestion, index, simulationRunSeed],
+  );
 
   const start = () => {
     setQueue([...pool].sort(() => Math.random() - 0.5).slice(0, 20));
+    setSimulationRunSeed(`${Date.now()}-${Math.random()}`);
     setIndex(0);
     setSelectedId(null);
     setHintOpen(false);
@@ -4021,7 +4075,7 @@ function SimulationPage({
     );
   }
 
-  const question = queue[index];
+  const question = activeQuestion;
   if (!question) {
     return (
       <div className="mx-auto flex min-h-[68vh] max-w-xl items-center justify-center">
@@ -4045,6 +4099,9 @@ function SimulationPage({
   }
   const subject = state.subjects.find((item) => item.id === question.subjectId);
   const selected = question.alternatives.find((alternative) => alternative.id === selectedId);
+  const alternativesToDisplay = displayedAlternatives.length
+    ? displayedAlternatives
+    : question.alternatives;
   const next = () => {
     if (index === queue.length - 1) onFocusChange(false);
     setIndex((value) => value + 1);
@@ -4102,40 +4159,40 @@ function SimulationPage({
             </p>
           )}
           <div className="mt-8 grid gap-3">
-          {question.alternatives.map((alternative) => (
-            <div key={alternative.id}>
-              <button
-                className={`flex w-full items-center gap-4 rounded-2xl border-2 border-b-4 px-4 py-4 text-left transition active:translate-y-0.5 active:border-b-2 ${
-                  selectedId
-                    ? alternative.isCorrect
-                      ? "border-[#58cc02] bg-[#f1ffe7] text-[#46a302]"
-                      : selectedId === alternative.id
-                        ? "border-[#ff4b4b] bg-[#fff0f0] text-[#ea2b2b]"
-                        : "border-[#e5e5e5] bg-white text-[#4b4b4b]"
-                    : "border-[#e5e5e5] bg-white text-[#4b4b4b] hover:border-[#1cb0f6] hover:bg-[#f2fbff]"
-                }`}
-                onClick={() => {
-                  if (selectedId) return;
-                  setSelectedId(alternative.id);
-                  if (alternative.isCorrect) setCorrect((value) => value + 1);
-                }}
-              >
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border-2 border-current text-[13px] font-extrabold opacity-75">
-                  {alternative.label}
-                </span>
-                <span className="flex-1 text-[14px] font-extrabold leading-6 sm:text-[15px]">
-                  {alternative.text}
-                </span>
-                {selectedId && alternative.isCorrect && <CheckCircle2 size={22} className="shrink-0" />}
-                {selectedId === alternative.id && !alternative.isCorrect && <XCircle size={22} className="shrink-0" />}
-              </button>
-              {selectedId === alternative.id && (
-                <p className="animate-slide-up px-2 pt-3 text-[12px] font-semibold leading-5 text-[#777]">
-                  {alternative.rationale}
-                </p>
-              )}
-            </div>
-          ))}
+            {alternativesToDisplay.map((alternative, alternativeIndex) => (
+              <div key={alternative.id}>
+                <button
+                  className={`flex w-full items-center gap-4 rounded-2xl border-2 border-b-4 px-4 py-4 text-left transition active:translate-y-0.5 active:border-b-2 ${
+                    selectedId
+                      ? alternative.isCorrect
+                        ? "border-[#58cc02] bg-[#f1ffe7] text-[#46a302]"
+                        : selectedId === alternative.id
+                          ? "border-[#ff4b4b] bg-[#fff0f0] text-[#ea2b2b]"
+                          : "border-[#e5e5e5] bg-white text-[#4b4b4b]"
+                      : "border-[#e5e5e5] bg-white text-[#4b4b4b] hover:border-[#1cb0f6] hover:bg-[#f2fbff]"
+                  }`}
+                  onClick={() => {
+                    if (selectedId) return;
+                    setSelectedId(alternative.id);
+                    if (alternative.isCorrect) setCorrect((value) => value + 1);
+                  }}
+                >
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border-2 border-current text-[13px] font-extrabold opacity-75">
+                    {answerLabels[alternativeIndex] ?? alternative.label}
+                  </span>
+                  <span className="flex-1 text-[14px] font-extrabold leading-6 sm:text-[15px]">
+                    {alternative.text}
+                  </span>
+                  {selectedId && alternative.isCorrect && <CheckCircle2 size={22} className="shrink-0" />}
+                  {selectedId === alternative.id && !alternative.isCorrect && <XCircle size={22} className="shrink-0" />}
+                </button>
+                {selectedId === alternative.id && (
+                  <p className="animate-slide-up px-2 pt-3 text-[12px] font-semibold leading-5 text-[#777]">
+                    {alternative.rationale}
+                  </p>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       </div>
