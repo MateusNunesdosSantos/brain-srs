@@ -2082,13 +2082,24 @@ function LibraryPage({
   const toggle = (items: string[], id: string, update: (value: string[]) => void) =>
     update(items.includes(id) ? items.filter((item) => item !== id) : [...items, id]);
 
+  const parseImportContent = (rawJson: string) => {
+    try {
+      const parsed = contentImportSchema.safeParse(JSON.parse(rawJson));
+      if (!parsed.success) throw new Error("invalid");
+      setPendingImport(parsed.data);
+      setImportHelpOpen(false);
+      return true;
+    } catch {
+      window.alert("JSON inválido. Use uma exportação BrainSRS no formato correto.");
+      return false;
+    }
+  };
+
   const readImport = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
     try {
-      const parsed = contentImportSchema.safeParse(JSON.parse(await file.text()));
-      if (!parsed.success) throw new Error("invalid");
-      setPendingImport(parsed.data);
+      parseImportContent(await file.text());
     } catch {
       window.alert("Arquivo inválido. Use uma exportação BrainSRS em JSON.");
     } finally {
@@ -2237,6 +2248,7 @@ function LibraryPage({
             setImportHelpOpen(false);
             window.setTimeout(() => inputRef.current?.click(), 0);
           }}
+          onPasteJson={parseImportContent}
         />
       )}
       {pendingImport && (
@@ -2679,11 +2691,14 @@ const importExampleJson = `{
 function ImportFormatModal({
   onClose,
   onChooseFile,
+  onPasteJson,
 }: {
   onClose: () => void;
   onChooseFile: () => void;
+  onPasteJson: (rawJson: string) => boolean;
 }) {
   const [copied, setCopied] = useState(false);
+  const [pastedJson, setPastedJson] = useState("");
 
   const copyExampleJson = async () => {
     try {
@@ -2695,12 +2710,20 @@ function ImportFormatModal({
     }
   };
 
+  const importPastedJson = () => {
+    if (!pastedJson.trim()) {
+      window.alert("Cole um JSON antes de importar.");
+      return;
+    }
+    onPasteJson(pastedJson);
+  };
+
   return createPortal(
     <div className="fixed inset-0 z-[80] flex items-center justify-center bg-[#2f5f00]/45 p-4">
       <div
         aria-labelledby="import-format-title"
         aria-modal="true"
-        className="animate-feedback-in flex max-h-[92vh] w-full max-w-3xl flex-col rounded-[22px] bg-white p-5 shadow-2xl sm:p-6"
+        className="animate-feedback-in flex max-h-[92vh] w-full max-w-3xl flex-col overflow-y-auto rounded-[22px] bg-white p-5 shadow-2xl sm:p-6"
         role="dialog"
       >
         <div className="flex items-start justify-between gap-4">
@@ -2751,6 +2774,30 @@ function ImportFormatModal({
           <pre className="max-h-[42vh] overflow-auto p-4 text-[11px] leading-5 text-[#eef4ff]">
             <code>{importExampleJson}</code>
           </pre>
+        </div>
+        <div className="mt-5 rounded-2xl border border-[#e5e8ef] bg-[#fafafa] p-3">
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="text-[11px] font-extrabold text-[#344055]">Colar JSON</p>
+              <p className="mt-1 text-[10px] font-semibold leading-4 text-[#8b94a3]">
+                Cole aqui o conteúdo completo do arquivo para importar sem fazer upload.
+              </p>
+            </div>
+            <button
+              className="shrink-0 rounded-xl bg-[#58cc02] px-3 py-2 text-[10px] font-extrabold text-white disabled:cursor-not-allowed disabled:bg-[#c7d2e4]"
+              disabled={!pastedJson.trim()}
+              type="button"
+              onClick={importPastedJson}
+            >
+              Importar JSON
+            </button>
+          </div>
+          <textarea
+            className="mt-3 min-h-28 w-full resize-y rounded-xl border border-[#e1e6ef] bg-white p-3 font-mono text-[11px] leading-5 text-[#303a4f] outline-none transition placeholder:text-[#a8b0bd] focus:border-[#84d8ff]"
+            placeholder='Cole aqui o JSON, começando por { "format": "brainsrs-content-v1", ... }'
+            value={pastedJson}
+            onChange={(event) => setPastedJson(event.target.value)}
+          />
         </div>
         <div className="mt-5 rounded-xl bg-[#fff7e7] px-3 py-3 text-[11px] font-bold leading-5 text-[#9a630f]">
           Importar adiciona novos cadernos, matérias e questões à biblioteca atual. Depois de
