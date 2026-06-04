@@ -653,7 +653,7 @@ export function BrainSrsApp() {
           className={
             reviewFocusMode
               ? "min-h-screen"
-              : "mx-auto min-h-[calc(100vh-72px)] max-w-[1500px] px-4 py-5 sm:px-6 lg:px-8 lg:py-7"
+              : "mx-auto min-h-[calc(100vh-64px)] max-w-[1500px] px-3 py-4 sm:min-h-[calc(100vh-72px)] sm:px-6 sm:py-5 lg:px-8 lg:py-7"
           }
         >
           <div key={pathname} className="animate-page-in">
@@ -952,7 +952,7 @@ function Sidebar({
         />
       )}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-[248px] flex-col bg-[#58a700] px-4 py-5 text-white shadow-xl transition-[width,transform] duration-200 lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-[min(284px,calc(100vw-24px))] flex-col overflow-y-auto bg-[#58a700] px-4 py-5 text-white shadow-xl transition-[width,transform] duration-200 lg:translate-x-0 ${
           open ? "translate-x-0" : "-translate-x-full"
         } ${collapsed ? "lg:w-[80px] lg:px-3" : "lg:w-[248px]"}`}
       >
@@ -1059,7 +1059,7 @@ function Topbar({
     .join("")
     .toUpperCase();
   return (
-    <header className="sticky top-0 z-30 flex h-[72px] items-center border-b border-[#e5e5e5] bg-white/90 px-4 backdrop-blur sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-30 flex h-16 items-center border-b border-[#e5e5e5] bg-white/90 px-3 backdrop-blur sm:h-[72px] sm:px-6 lg:px-8">
       <button
         aria-label="Abrir menu"
         className="mr-3 rounded-xl p-2 text-[#5f6b7d] hover:bg-[#f7f7f7] lg:hidden"
@@ -1071,14 +1071,14 @@ function Topbar({
         <CalendarDays size={16} />
         <span className="capitalize">{formatDate(new Date())}</span>
       </div>
-      <div className="ml-auto flex items-center gap-2 sm:gap-4">
+      <div className="ml-auto flex min-w-0 items-center gap-1.5 sm:gap-4">
         <button className="relative rounded-xl p-2.5 text-[#6e7789] transition hover:bg-[#f7f7f7]">
           <Bell size={19} />
           {dueCount > 0 && (
             <span className="absolute right-2 top-2 h-2 w-2 rounded-full border-2 border-white bg-[#f18a52]" />
           )}
         </button>
-        <div className="h-8 w-px bg-[#e5e5e5]" />
+        <div className="hidden h-8 w-px bg-[#e5e5e5] sm:block" />
         <div className="flex items-center gap-2">
           <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#d7ffb8] text-xs font-extrabold text-[#58a700]">
             {initials}
@@ -1116,7 +1116,7 @@ function SectionTitle({
 }) {
   return (
     <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-      <div>
+      <div className="min-w-0">
         {eyebrow && (
           <p className="mb-1 text-[10px] font-extrabold uppercase tracking-[1.7px] text-[#58a700]">
             {eyebrow}
@@ -1131,7 +1131,7 @@ function SectionTitle({
           </p>
         )}
       </div>
-      {actions && <div className="flex flex-wrap gap-2">{actions}</div>}
+      {actions && <div className="grid w-full grid-cols-1 gap-2 min-[420px]:grid-cols-2 sm:flex sm:w-auto sm:flex-wrap sm:justify-end">{actions}</div>}
     </div>
   );
 }
@@ -1175,14 +1175,14 @@ function Dashboard({
   return (
     <div className="space-y-6">
       <section className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
-        <div>
+        <div className="min-w-0">
           <p className="text-[13px] font-bold text-[#8a94a5]">Bom dia, {userName.split(/\s+/)[0]}</p>
-          <h1 className="mt-1 text-[27px] font-extrabold tracking-[-1px] text-[#202a41] sm:text-[32px]">
+          <h1 className="mt-1 text-[24px] font-extrabold leading-tight tracking-[-1px] text-[#202a41] sm:text-[32px]">
             Pronto para fortalecer sua memória?
           </h1>
         </div>
         <button
-          className="flex items-center justify-center gap-2 rounded-xl border-b-4 border-[#46a302] bg-[#58cc02] px-4 py-3 text-[13px] font-extrabold text-white transition hover:bg-[#61d808] active:translate-y-0.5 active:border-b-2"
+          className="flex w-full items-center justify-center gap-2 rounded-xl border-b-4 border-[#46a302] bg-[#58cc02] px-4 py-3 text-[13px] font-extrabold text-white transition hover:bg-[#61d808] active:translate-y-0.5 active:border-b-2 md:w-auto"
           onClick={onStartReview}
         >
           <Zap size={17} fill="currentColor" />
@@ -1234,8 +1234,8 @@ function Dashboard({
       </section>
 
       <section className="grid gap-5 xl:grid-cols-[1.5fr_1fr]">
-        <AnimatedCard delay={220} className="rounded-[20px] border border-[#e5e5e5] bg-white p-5 shadow-[0_7px_18px_rgba(41,50,81,0.035)]">
-          <div className="flex items-start justify-between">
+        <AnimatedCard delay={220} className="rounded-[20px] border border-[#e5e5e5] bg-white p-4 shadow-[0_7px_18px_rgba(41,50,81,0.035)] sm:p-5">
+          <div className="flex flex-col gap-3 min-[420px]:flex-row min-[420px]:items-start min-[420px]:justify-between">
             <div>
               <h2 className="text-[15px] font-extrabold text-[#2a354b]">Ritmo de estudo</h2>
               <p className="mt-1 text-[11px] font-semibold text-[#9aa3b1]">
@@ -1246,7 +1246,7 @@ function Dashboard({
               Esta semana
             </span>
           </div>
-          <div className="mt-7 flex h-[178px] items-end justify-between gap-3 border-b border-[#edf0f5] px-1">
+          <div className="mt-7 flex h-[150px] items-end justify-between gap-1.5 border-b border-[#edf0f5] px-1 sm:h-[178px] sm:gap-3">
             {weekActivity.map((item) => (
               <div key={item.dateKey} className="flex h-full flex-1 flex-col items-center justify-end gap-2">
                 <div
@@ -1269,7 +1269,7 @@ function Dashboard({
             ))}
           </div>
         </AnimatedCard>
-        <AnimatedCard delay={275} className="relative overflow-hidden rounded-[20px] bg-[#1cb0f6] p-5 text-white shadow-[0_10px_24px_rgba(39,33,100,0.16)]">
+        <AnimatedCard delay={275} className="relative overflow-hidden rounded-[20px] bg-[#1cb0f6] p-4 text-white shadow-[0_10px_24px_rgba(39,33,100,0.16)] sm:p-5">
           <div className="absolute -right-9 -top-9 h-40 w-40 rounded-full bg-[#84d8ff]/20" />
           <div className="absolute -bottom-10 right-7 h-24 w-24 rounded-full border border-[#84d8ff]/20" />
           <div className="relative">
@@ -1290,8 +1290,8 @@ function Dashboard({
       </section>
 
       <section className="grid gap-5 xl:grid-cols-[1.45fr_1fr]">
-        <AnimatedCard delay={330} className="rounded-[20px] border border-[#e5e5e5] bg-white p-5">
-          <div className="flex items-center justify-between">
+        <AnimatedCard delay={330} className="rounded-[20px] border border-[#e5e5e5] bg-white p-4 sm:p-5">
+          <div className="flex flex-col gap-3 min-[420px]:flex-row min-[420px]:items-center min-[420px]:justify-between">
             <div>
               <h2 className="text-[15px] font-extrabold text-[#2a354b]">Matérias em andamento</h2>
               <p className="mt-1 text-[11px] font-semibold text-[#9aa3b1]">
@@ -1314,7 +1314,7 @@ function Dashboard({
               return (
                 <div
                   key={subject.id}
-                  className="flex items-center gap-3 rounded-xl border border-[#eef0f4] px-3 py-3"
+                  className="flex flex-col gap-3 rounded-xl border border-[#eef0f4] px-3 py-3 min-[420px]:flex-row min-[420px]:items-center"
                 >
                   <div
                     className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-white"
@@ -1341,7 +1341,7 @@ function Dashboard({
                       />
                     </div>
                   </div>
-                  <span className="min-w-16 text-right text-[10px] font-bold text-[#99a2b1]">
+                  <span className="text-[10px] font-bold text-[#99a2b1] min-[420px]:min-w-16 min-[420px]:text-right">
                     {count} pendentes
                   </span>
                 </div>
@@ -1349,7 +1349,7 @@ function Dashboard({
             })}
           </div>
         </AnimatedCard>
-        <AnimatedCard delay={385} className="rounded-[20px] border border-[#e5e5e5] bg-white p-5">
+        <AnimatedCard delay={385} className="rounded-[20px] border border-[#e5e5e5] bg-white p-4 sm:p-5">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-[15px] font-extrabold text-[#2a354b]">Pontos de atenção</h2>
@@ -1625,29 +1625,29 @@ function ReviewPage({
   };
 
   return (
-    <div className="min-h-screen bg-white px-4 py-5 sm:px-6 lg:px-8 lg:py-7">
+    <div className="min-h-screen bg-white px-3 py-4 sm:px-6 lg:px-8 lg:py-7">
       <div className="mx-auto max-w-[980px]">
-        <div className="flex items-center gap-4 sm:gap-6">
+        <div className="flex items-center gap-2 sm:gap-6">
           <button
             aria-label="Sair da revisão"
             className="rounded-xl p-1 text-[#afafaf] transition hover:bg-[#f3f3f3] hover:text-[#777]"
             onClick={onExit}
           >
-            <X size={28} strokeWidth={3} />
+            <X size={24} strokeWidth={3} />
           </button>
-          <div className="h-4 flex-1 overflow-hidden rounded-full bg-[#e5e5e5]">
+          <div className="h-3 flex-1 overflow-hidden rounded-full bg-[#e5e5e5] sm:h-4">
             <div
               className="h-full rounded-full bg-[#58cc02] transition-all duration-500"
               style={{ width: `${((currentIndex + (selectedId ? 1 : 0)) / queueLength) * 100}%` }}
             />
           </div>
-          <div className="flex min-w-fit items-center gap-1.5 text-[14px] font-extrabold text-[#ff9600]">
-            <Flame size={21} fill="currentColor" />
+          <div className="flex min-w-fit items-center gap-1 text-[12px] font-extrabold text-[#ff9600] sm:gap-1.5 sm:text-[14px]">
+            <Flame size={18} fill="currentColor" />
             {Math.min(currentIndex + 1, queueLength)}/{queueLength}
           </div>
         </div>
 
-        <div className="mx-auto max-w-[760px] pb-36 pt-10 sm:pt-16">
+        <div className="mx-auto max-w-[760px] pb-40 pt-8 sm:pb-36 sm:pt-16">
           <div className="flex flex-wrap items-center gap-2">
             <span className="rounded-full bg-[#e9f8dd] px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.5px] text-[#58a700]">
               {subject?.name}
@@ -1670,7 +1670,7 @@ function ReviewPage({
           <p className="mt-8 text-[14px] font-extrabold uppercase tracking-[0.8px] text-[#777]">
             Selecione a resposta correta
           </p>
-          <h1 className="mt-3 text-[22px] font-extrabold leading-9 tracking-[-0.4px] text-[#3c3c3c] sm:text-[28px] sm:leading-10">
+          <h1 className="mt-3 text-[20px] font-extrabold leading-8 tracking-[-0.4px] text-[#3c3c3c] sm:text-[28px] sm:leading-10">
             {question.prompt}
           </h1>
           <button
@@ -1704,10 +1704,10 @@ function ReviewPage({
               return (
                 <div key={alternative.id}>
                   <button
-                    className={`flex w-full items-center gap-4 rounded-2xl border-2 border-b-4 px-4 py-4 text-left transition active:translate-y-0.5 active:border-b-2 ${tone}`}
+                    className={`flex w-full items-center gap-3 rounded-2xl border-2 border-b-4 px-3 py-3.5 text-left transition active:translate-y-0.5 active:border-b-2 sm:gap-4 sm:px-4 sm:py-4 ${tone}`}
                     onClick={() => selectAnswer(alternative)}
                   >
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border-2 border-current text-[13px] font-extrabold opacity-75">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border-2 border-current text-[12px] font-extrabold opacity-75 sm:h-8 sm:w-8 sm:text-[13px]">
                       {answerLabels[alternativeIndex] ?? alternative.label}
                     </span>
                     <span className="flex-1 text-[14px] font-extrabold leading-6 sm:text-[15px]">
@@ -1738,7 +1738,7 @@ function ReviewPage({
               : "border-[#ffc1c1] bg-[#ffdfe0]"
           }`}
         >
-          <div className="mx-auto flex max-w-[980px] flex-col gap-4 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+          <div className="mx-auto flex max-w-[980px] flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:py-5">
             <div className="flex items-center gap-3">
               <div
                 className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/70 ${
@@ -1759,7 +1759,7 @@ function ReviewPage({
               </div>
             </div>
             <button
-              className={`flex items-center justify-center gap-2 rounded-xl border-b-4 px-7 py-3 text-[13px] font-extrabold uppercase tracking-[0.6px] text-white transition active:translate-y-0.5 active:border-b-2 ${
+              className={`flex w-full items-center justify-center gap-2 rounded-xl border-b-4 px-7 py-3 text-[13px] font-extrabold uppercase tracking-[0.6px] text-white transition active:translate-y-0.5 active:border-b-2 sm:w-auto ${
                 selected.isCorrect
                   ? "border-[#46a302] bg-[#58cc02] hover:bg-[#61d808]"
                   : "border-[#d83333] bg-[#ff4b4b] hover:bg-[#ff5b5b]"
@@ -2164,34 +2164,34 @@ function LibraryPage({
               onChange={readImport}
             />
             <button
-              className="flex items-center gap-2 rounded-xl border border-[#e5e5e5] bg-white px-3 py-2.5 text-[11px] font-extrabold text-[#6d7789]"
+              className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#e5e5e5] bg-white px-3 py-2.5 text-[11px] font-extrabold text-[#6d7789] sm:w-auto"
               onClick={() => setImportHelpOpen(true)}
             >
               <ImportIcon size={15} /> Importar
             </button>
             <button
-              className="flex items-center gap-2 rounded-xl border border-[#e5e5e5] bg-white px-3 py-2.5 text-[11px] font-extrabold text-[#6d7789]"
+              className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#e5e5e5] bg-white px-3 py-2.5 text-[11px] font-extrabold text-[#6d7789] sm:w-auto"
               onClick={() => setExportOpen(true)}
             >
               <Download size={15} /> Exportar
             </button>
             <button
               data-tour-target="notebook"
-              className="flex items-center gap-2 rounded-xl border border-[#a5ed6e] bg-[#f7fff2] px-3 py-2.5 text-[11px] font-extrabold text-[#58a700]"
+              className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#a5ed6e] bg-[#f7fff2] px-3 py-2.5 text-[11px] font-extrabold text-[#58a700] sm:w-auto"
               onClick={() => setNotebookOpen(true)}
             >
               <Plus size={15} /> Novo caderno
             </button>
             <button
               data-tour-target="subject"
-              className="flex items-center gap-2 rounded-xl border border-[#a5ed6e] bg-[#f7fff2] px-3 py-2.5 text-[11px] font-extrabold text-[#58a700]"
+              className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#a5ed6e] bg-[#f7fff2] px-3 py-2.5 text-[11px] font-extrabold text-[#58a700] sm:w-auto"
               onClick={() => setSubjectOpen(true)}
             >
               <Plus size={15} /> Nova matéria
             </button>
             <button
               data-tour-target="question"
-              className="flex items-center gap-2 rounded-xl bg-[#58cc02] px-3 py-2.5 text-[11px] font-extrabold text-white"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#58cc02] px-3 py-2.5 text-[11px] font-extrabold text-white sm:w-auto"
               onClick={() => setQuestionOpen(true)}
             >
               <Plus size={15} /> Nova questão
@@ -2200,7 +2200,7 @@ function LibraryPage({
         }
       />
       <section className="grid gap-5 xl:grid-cols-[1.45fr_0.8fr]">
-        <div className="rounded-[20px] border border-[#e5e5e5] bg-white p-4 sm:p-5">
+        <div className="min-w-0 rounded-[20px] border border-[#e5e5e5] bg-white p-3 sm:p-5">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a8b0bd]" size={17} />
             <input
@@ -2247,15 +2247,15 @@ function LibraryPage({
           )}
         </div>
         <div className="space-y-4">
-          <div className="rounded-[20px] border border-[#e5e5e5] bg-white p-5">
+          <div className="rounded-[20px] border border-[#e5e5e5] bg-white p-4 sm:p-5">
             <h2 className="text-[14px] font-extrabold text-[#344055]">Resumo da biblioteca</h2>
-            <div className="mt-4 grid grid-cols-3 gap-2">
+            <div className="mt-4 grid grid-cols-1 gap-2 min-[420px]:grid-cols-3">
               <LibraryMetric label="Cadernos" value={state.notebooks.length} />
               <LibraryMetric label="Matérias" value={state.subjects.length} />
               <LibraryMetric label="Questões" value={state.questions.length} />
             </div>
           </div>
-          <div className="rounded-[20px] border border-[#e5e5e5] bg-[#1cb0f6] p-5 text-white">
+          <div className="rounded-[20px] border border-[#e5e5e5] bg-[#1cb0f6] p-4 text-white sm:p-5">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-[#ffffff]">
               <Upload size={19} />
             </div>
@@ -2392,7 +2392,7 @@ function NotebookTree({
   return (
     <div className="relative overflow-hidden rounded-xl border border-[#edf0f4]">
       <button
-        className="flex w-full items-center gap-3 bg-[#fafafa] py-3 pl-3 pr-12 text-left"
+        className="flex w-full items-center gap-2 bg-[#fafafa] py-3 pl-2 pr-10 text-left sm:gap-3 sm:pl-3 sm:pr-12"
         onClick={onToggle}
       >
         {expanded ? <ChevronDown size={15} /> : <ChevronRight size={15} />}
@@ -2402,8 +2402,8 @@ function NotebookTree({
         >
           <FolderOpen size={16} />
         </span>
-        <span className="flex-1 text-[12px] font-extrabold text-[#3d485d]">{notebook.name}</span>
-        <span className="text-[10px] font-bold text-[#a1a9b7]">{count} questões</span>
+        <span className="min-w-0 flex-1 truncate text-[12px] font-extrabold text-[#3d485d]">{notebook.name}</span>
+        <span className="shrink-0 text-[10px] font-bold text-[#a1a9b7]">{count} questões</span>
       </button>
       <div className="absolute right-1 top-2">
         <DeleteButton
@@ -2420,7 +2420,7 @@ function NotebookTree({
         />
       </div>
       {expanded && (
-        <div className="border-t border-[#edf0f4] bg-white px-3 py-2">
+        <div className="border-t border-[#edf0f4] bg-white px-2 py-2 sm:px-3">
           {!notebookSubjects.length && (
             <p className="px-3 py-3 text-[11px] font-semibold text-[#9aa3b1]">
               Este caderno ainda não possui matérias. Use “Nova matéria” para continuar.
@@ -2430,15 +2430,15 @@ function NotebookTree({
             const subjectQuestions = questions.filter((question) => question.subjectId === subject.id);
             const subjectExpanded = expandedSubjects.includes(subject.id);
             return (
-              <div key={subject.id} className="relative ml-3 border-l border-[#eceef3] pl-3">
+              <div key={subject.id} className="relative ml-1 border-l border-[#eceef3] pl-2 sm:ml-3 sm:pl-3">
                 <button
                   className="flex w-full items-center gap-2 py-2 pr-8 text-left"
                   onClick={() => onSubjectToggle(subject.id)}
                 >
                   {subjectExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
                   <BookOpen size={15} style={{ color: subject.color }} />
-                  <span className="flex-1 text-[11px] font-extrabold text-[#596477]">{subject.name}</span>
-                  <span className="text-[10px] font-bold text-[#a8afbb]">{subjectQuestions.length}</span>
+                  <span className="min-w-0 flex-1 truncate text-[11px] font-extrabold text-[#596477]">{subject.name}</span>
+                  <span className="shrink-0 text-[10px] font-bold text-[#a8afbb]">{subjectQuestions.length}</span>
                 </button>
                 <div className="absolute right-0 top-1">
                   <DeleteButton
@@ -2454,7 +2454,7 @@ function NotebookTree({
                   />
                 </div>
                 {subjectExpanded && (
-                  <div className="mb-2 ml-5 space-y-2">
+                  <div className="mb-2 ml-1 space-y-2 sm:ml-5">
                     {subjectQuestions.map((question) => (
                       <QuestionListItem
                         key={question.id}
@@ -2760,11 +2760,11 @@ function ImportFormatModal({
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-[#2f5f00]/45 p-4">
+    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-[#2f5f00]/45 p-3 sm:p-4">
       <div
         aria-labelledby="import-format-title"
         aria-modal="true"
-        className="animate-feedback-in flex max-h-[92vh] w-full max-w-3xl flex-col overflow-y-auto rounded-[22px] bg-white p-5 shadow-2xl sm:p-6"
+        className="animate-feedback-in flex max-h-[92vh] w-full max-w-3xl flex-col overflow-y-auto rounded-[22px] bg-white p-4 shadow-2xl sm:p-6"
         role="dialog"
       >
         <div className="flex items-start justify-between gap-4">
@@ -2817,15 +2817,15 @@ function ImportFormatModal({
           </pre>
         </div>
         <div className="mt-5 rounded-2xl border border-[#e5e8ef] bg-[#fafafa] p-3">
-          <div className="flex items-start justify-between gap-3">
-            <div>
+          <div className="flex flex-col gap-3 min-[420px]:flex-row min-[420px]:items-start min-[420px]:justify-between">
+            <div className="min-w-0">
               <p className="text-[11px] font-extrabold text-[#344055]">Colar JSON</p>
               <p className="mt-1 text-[10px] font-semibold leading-4 text-[#8b94a3]">
                 Cole aqui o conteúdo completo do arquivo para importar sem fazer upload.
               </p>
             </div>
             <button
-              className="shrink-0 rounded-xl bg-[#58cc02] px-3 py-2 text-[10px] font-extrabold text-white disabled:cursor-not-allowed disabled:bg-[#c7d2e4]"
+              className="w-full shrink-0 rounded-xl bg-[#58cc02] px-3 py-2 text-[10px] font-extrabold text-white disabled:cursor-not-allowed disabled:bg-[#c7d2e4] min-[420px]:w-auto"
               disabled={!pastedJson.trim()}
               type="button"
               onClick={importPastedJson}
@@ -2846,14 +2846,14 @@ function ImportFormatModal({
         </div>
         <div className="mt-5 flex flex-col justify-end gap-2 sm:flex-row">
           <button
-            className="rounded-xl border border-[#e5e8ef] px-4 py-2.5 text-[11px] font-extrabold text-[#788294]"
+            className="w-full rounded-xl border border-[#e5e8ef] px-4 py-2.5 text-[11px] font-extrabold text-[#788294] sm:w-auto"
             type="button"
             onClick={onClose}
           >
             Cancelar
           </button>
           <button
-            className="flex items-center justify-center gap-2 rounded-xl bg-[#58cc02] px-4 py-2.5 text-[11px] font-extrabold text-white"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#58cc02] px-4 py-2.5 text-[11px] font-extrabold text-white sm:w-auto"
             type="button"
             onClick={onChooseFile}
           >
@@ -2887,11 +2887,11 @@ function ImportConfirmationModal({
   onConfirm: () => void;
 }) {
   return createPortal(
-    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-[#301616]/55 p-4">
+    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-[#301616]/55 p-3 sm:p-4">
       <div
         aria-labelledby="import-confirmation-title"
         aria-modal="true"
-        className="animate-feedback-in w-full max-w-md rounded-[22px] bg-white p-5 shadow-2xl sm:p-6"
+        className="animate-feedback-in max-h-[92vh] w-full max-w-md overflow-y-auto rounded-[22px] bg-white p-4 shadow-2xl sm:p-6"
         role="dialog"
       >
         <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#fff0f0] text-[#ff4b4b]">
@@ -2906,7 +2906,7 @@ function ImportConfirmationModal({
         <p className="mt-3 text-[12px] font-semibold leading-5 text-[#7c8695]">
           A importação manterá sua biblioteca atual e adicionará novos cadernos, matérias e questões. O progresso e o histórico existentes serão preservados.
         </p>
-        <div className="mt-4 grid grid-cols-2 gap-3 text-center">
+        <div className="mt-4 grid grid-cols-1 gap-3 text-center min-[420px]:grid-cols-2">
           <div className="rounded-xl bg-[#fff8f8] px-3 py-3">
             <p className="text-[10px] font-extrabold uppercase text-[#a34b4b]">Biblioteca atual</p>
             <p className="mt-1 text-[12px] font-bold text-[#7c4b4b]">
@@ -2923,16 +2923,16 @@ function ImportConfirmationModal({
         <p className="mt-4 text-[11px] font-bold text-[#687386]">
           As questões importadas começarão com progresso zerado. Deseja continuar?
         </p>
-        <div className="mt-6 flex justify-end gap-2">
+        <div className="mt-6 flex flex-col justify-end gap-2 sm:flex-row">
           <button
-            className="rounded-xl border border-[#e5e8ef] px-4 py-2.5 text-[11px] font-extrabold text-[#788294]"
+            className="w-full rounded-xl border border-[#e5e8ef] px-4 py-2.5 text-[11px] font-extrabold text-[#788294] sm:w-auto"
             type="button"
             onClick={onClose}
           >
             Cancelar
           </button>
           <button
-            className="flex items-center gap-2 rounded-xl bg-[#ff4b4b] px-4 py-2.5 text-[11px] font-extrabold text-white transition hover:bg-[#e73f3f]"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#ff4b4b] px-4 py-2.5 text-[11px] font-extrabold text-white transition hover:bg-[#e73f3f] sm:w-auto"
             type="button"
             onClick={onConfirm}
           >
@@ -3038,11 +3038,11 @@ function ExportContentModal({ state, onClose }: { state: AppState; onClose: () =
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-[#2f5f00]/45 p-4">
+    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-[#2f5f00]/45 p-3 sm:p-4">
       <div
         aria-labelledby="export-content-title"
         aria-modal="true"
-        className="animate-feedback-in flex max-h-[92vh] w-full max-w-xl flex-col rounded-[22px] bg-white p-5 shadow-2xl sm:p-6"
+        className="animate-feedback-in flex max-h-[92vh] w-full max-w-xl flex-col rounded-[22px] bg-white p-4 shadow-2xl sm:p-6"
         role="dialog"
       >
         <div className="flex items-start justify-between gap-4">
@@ -3066,7 +3066,7 @@ function ExportContentModal({ state, onClose }: { state: AppState; onClose: () =
             <X size={19} />
           </button>
         </div>
-        <div className="mt-5 flex items-center justify-between gap-3">
+        <div className="mt-5 flex flex-col gap-3 min-[420px]:flex-row min-[420px]:items-center min-[420px]:justify-between">
           <p className="text-[11px] font-extrabold text-[#697487]">Conteúdo disponível</p>
           <div className="flex gap-3">
             <button className="text-[10px] font-extrabold text-[#58a700]" type="button" onClick={selectAll}>
@@ -3088,7 +3088,7 @@ function ExportContentModal({ state, onClose }: { state: AppState; onClose: () =
                 notebookSubjects.every((subject) => selectedSubjectIds.has(subject.id)));
             return (
               <div key={notebook.id} className="rounded-xl border border-[#edf0f4] bg-[#fafafa] p-3">
-                <label className="flex cursor-pointer items-center gap-3">
+                <label className="flex cursor-pointer items-center gap-2 sm:gap-3">
                   <input
                     checked={notebookChecked}
                     className="h-4 w-4 accent-[#58cc02]"
@@ -3101,13 +3101,13 @@ function ExportContentModal({ state, onClose }: { state: AppState; onClose: () =
                   >
                     <FolderOpen size={16} />
                   </span>
-                  <span className="flex-1 text-[12px] font-extrabold text-[#3d485d]">{notebook.name}</span>
-                  <span className="text-[10px] font-bold text-[#a1a9b7]">
+                  <span className="min-w-0 flex-1 truncate text-[12px] font-extrabold text-[#3d485d]">{notebook.name}</span>
+                  <span className="shrink-0 text-[10px] font-bold text-[#a1a9b7]">
                     {notebookSubjects.length} matéria(s)
                   </span>
                 </label>
                 {notebookSubjects.length > 0 && (
-                  <div className="mt-3 space-y-1 border-l border-[#dfe3e9] pl-4">
+                  <div className="mt-3 space-y-1 border-l border-[#dfe3e9] pl-2 sm:pl-4">
                     {notebookSubjects.map((subject) => (
                       <label key={subject.id} className="flex cursor-pointer items-center gap-2 rounded-lg px-2 py-2 hover:bg-white">
                         <input
@@ -3119,8 +3119,8 @@ function ExportContentModal({ state, onClose }: { state: AppState; onClose: () =
                           onChange={() => toggleSubject(subject)}
                         />
                         <BookOpen size={15} style={{ color: subject.color }} />
-                        <span className="flex-1 text-[11px] font-extrabold text-[#596477]">{subject.name}</span>
-                        <span className="text-[10px] font-bold text-[#a8afbb]">
+                        <span className="min-w-0 flex-1 truncate text-[11px] font-extrabold text-[#596477]">{subject.name}</span>
+                        <span className="shrink-0 text-[10px] font-bold text-[#a8afbb]">
                           {state.questions.filter((question) => question.subjectId === subject.id).length} questão(ões)
                         </span>
                       </label>
@@ -3134,16 +3134,16 @@ function ExportContentModal({ state, onClose }: { state: AppState; onClose: () =
         <div className="mt-5 rounded-xl bg-[#eef9ff] px-3 py-3 text-[10px] font-bold leading-5 text-[#357897]">
           Selecionado: {selectedNotebooks.length} caderno(s), {selectedSubjects.length} matéria(s) e {selectedQuestions.length} questão(ões).
         </div>
-        <div className="mt-5 flex justify-end gap-2">
+        <div className="mt-5 flex flex-col justify-end gap-2 sm:flex-row">
           <button
-            className="rounded-xl border border-[#e5e8ef] px-4 py-2.5 text-[11px] font-extrabold text-[#788294]"
+            className="w-full rounded-xl border border-[#e5e8ef] px-4 py-2.5 text-[11px] font-extrabold text-[#788294] sm:w-auto"
             type="button"
             onClick={onClose}
           >
             Cancelar
           </button>
           <button
-            className="flex items-center gap-2 rounded-xl bg-[#58cc02] px-4 py-2.5 text-[11px] font-extrabold text-white disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#58cc02] px-4 py-2.5 text-[11px] font-extrabold text-white disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
             disabled={!selectedNotebooks.length}
             type="button"
             onClick={exportContent}
@@ -3173,11 +3173,11 @@ function DeleteConfirmationModal({
         ? `Esta matéria contém ${target.questionCount} questão(ões). As questões, o progresso, cooldowns e histórico de revisões relacionados serão excluídos permanentemente.`
         : "O progresso, cooldowns e histórico de revisões desta questão serão excluídos permanentemente.";
   return createPortal(
-    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-[#301616]/55 p-4">
+    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-[#301616]/55 p-3 sm:p-4">
       <div
         aria-labelledby="delete-confirmation-title"
         aria-modal="true"
-        className="animate-feedback-in w-full max-w-md rounded-[22px] bg-white p-5 shadow-2xl sm:p-6"
+        className="animate-feedback-in max-h-[92vh] w-full max-w-md overflow-y-auto rounded-[22px] bg-white p-4 shadow-2xl sm:p-6"
         role="dialog"
       >
         <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#fff0f0] text-[#ff4b4b]">
@@ -3198,16 +3198,16 @@ function DeleteConfirmationModal({
         <p className="mt-4 text-[11px] font-bold text-[#687386]">
           Tem certeza de que deseja continuar?
         </p>
-        <div className="mt-6 flex justify-end gap-2">
+        <div className="mt-6 flex flex-col justify-end gap-2 sm:flex-row">
           <button
-            className="rounded-xl border border-[#e5e8ef] px-4 py-2.5 text-[11px] font-extrabold text-[#788294]"
+            className="w-full rounded-xl border border-[#e5e8ef] px-4 py-2.5 text-[11px] font-extrabold text-[#788294] sm:w-auto"
             type="button"
             onClick={onClose}
           >
             Cancelar
           </button>
           <button
-            className="flex items-center gap-2 rounded-xl bg-[#ff4b4b] px-4 py-2.5 text-[11px] font-extrabold text-white transition hover:bg-[#e73f3f]"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#ff4b4b] px-4 py-2.5 text-[11px] font-extrabold text-white transition hover:bg-[#e73f3f] sm:w-auto"
             type="button"
             onClick={onConfirm}
           >
@@ -3270,9 +3270,9 @@ function AddCollectionModal({
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-[#2f5f00]/45 p-4">
+    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-[#2f5f00]/45 p-3 sm:p-4">
       <form
-        className="w-full max-w-lg rounded-[22px] bg-white p-5 shadow-2xl sm:p-6"
+        className="max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-[22px] bg-white p-4 shadow-2xl sm:p-6"
         onSubmit={submit}
       >
         <div className="flex items-start justify-between gap-4">
@@ -3345,16 +3345,16 @@ function AddCollectionModal({
             ))}
           </div>
         </div>
-        <div className="mt-6 flex justify-end gap-2">
+        <div className="mt-6 flex flex-col justify-end gap-2 sm:flex-row">
           <button
-            className="rounded-xl border border-[#e5e8ef] px-4 py-2.5 text-[11px] font-extrabold text-[#788294]"
+            className="w-full rounded-xl border border-[#e5e8ef] px-4 py-2.5 text-[11px] font-extrabold text-[#788294] sm:w-auto"
             type="button"
             onClick={onClose}
           >
             Cancelar
           </button>
           <button
-            className="rounded-xl bg-[#58cc02] px-4 py-2.5 text-[11px] font-extrabold text-white"
+            className="w-full rounded-xl bg-[#58cc02] px-4 py-2.5 text-[11px] font-extrabold text-white sm:w-auto"
             type="submit"
           >
             Criar
@@ -3404,9 +3404,9 @@ function AddQuestionModal({
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-[#2f5f00]/45 p-4">
+    <div className="fixed inset-0 z-[80] flex items-center justify-center bg-[#2f5f00]/45 p-3 sm:p-4">
       <form
-        className="max-h-[92vh] w-full max-w-2xl overflow-auto rounded-[22px] bg-white p-5 shadow-2xl sm:p-6"
+        className="max-h-[92vh] w-full max-w-2xl overflow-auto rounded-[22px] bg-white p-4 shadow-2xl sm:p-6"
         onSubmit={submit}
       >
         <div className="flex items-center justify-between">
@@ -3483,16 +3483,16 @@ function AddQuestionModal({
             ))}
           </div>
         </div>
-        <div className="mt-6 flex justify-end gap-2">
+        <div className="mt-6 flex flex-col justify-end gap-2 sm:flex-row">
           <button
-            className="rounded-xl border border-[#e5e8ef] px-4 py-2.5 text-[11px] font-extrabold text-[#788294]"
+            className="w-full rounded-xl border border-[#e5e8ef] px-4 py-2.5 text-[11px] font-extrabold text-[#788294] sm:w-auto"
             type="button"
             onClick={onClose}
           >
             Cancelar
           </button>
           <button
-            className="rounded-xl bg-[#58cc02] px-4 py-2.5 text-[11px] font-extrabold text-white"
+            className="w-full rounded-xl bg-[#58cc02] px-4 py-2.5 text-[11px] font-extrabold text-white sm:w-auto"
             type="submit"
           >
             Adicionar questão
@@ -3550,7 +3550,7 @@ function StatsPage({ state }: { state: AppState }) {
         <MetricCard delay={165} icon={<Flame size={20} />} iconClass="bg-[#fff2de] text-[#ff9600]" title="Ofensiva" value={formatDays(calculateStreak(activityDates))} detail="Dias consecutivos com atividade" />
       </section>
       <section className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
-        <AnimatedCard delay={220} className="rounded-[20px] border border-[#e5e5e5] bg-white p-5">
+        <AnimatedCard delay={220} className="rounded-[20px] border border-[#e5e5e5] bg-white p-4 sm:p-5">
           <h2 className="text-[15px] font-extrabold text-[#354055]">Retenção por matéria</h2>
           <p className="mt-1 text-[11px] font-semibold text-[#99a2b0]">Acertos versus erros em todas as respostas registradas</p>
           <div className="mt-5 space-y-4">
@@ -3574,7 +3574,7 @@ function StatsPage({ state }: { state: AppState }) {
             })}
           </div>
         </AnimatedCard>
-        <AnimatedCard delay={275} className="rounded-[20px] border border-[#e5e5e5] bg-white p-5">
+        <AnimatedCard delay={275} className="rounded-[20px] border border-[#e5e5e5] bg-white p-4 sm:p-5">
           <h2 className="text-[15px] font-extrabold text-[#354055]">Consistência</h2>
           <p className="mt-1 text-[11px] font-semibold text-[#99a2b0]">Atividade nas últimas 4 semanas</p>
           <div className="mt-5 flex gap-2">
@@ -3651,13 +3651,13 @@ function VulnerabilitiesPage({ state, onStudy }: { state: AppState; onStudy: () 
         actions={
           <>
             <button
-              className="flex items-center gap-2 rounded-xl border border-[#e5e5e5] bg-white px-3 py-2.5 text-[11px] font-extrabold text-[#6f798b]"
+              className="flex w-full items-center justify-center gap-2 rounded-xl border border-[#e5e5e5] bg-white px-3 py-2.5 text-[11px] font-extrabold text-[#6f798b] sm:w-auto"
               onClick={exportReport}
             >
               <FileText size={15} /> Exportar relatório
             </button>
             <button
-              className="flex items-center gap-2 rounded-xl bg-[#58cc02] px-3 py-2.5 text-[11px] font-extrabold text-white"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#58cc02] px-3 py-2.5 text-[11px] font-extrabold text-white sm:w-auto"
               onClick={onStudy}
             >
               <GraduationCap size={15} /> Estudar gargalos
@@ -3676,7 +3676,7 @@ function VulnerabilitiesPage({ state, onStudy }: { state: AppState; onStudy: () 
             const subject = state.subjects.find((item) => item.id === question.subjectId);
             const progress = state.progress[question.id];
             return (
-              <div key={question.id} className="rounded-[18px] border border-[#e5e5e5] bg-white p-4">
+              <div key={question.id} className="rounded-[18px] border border-[#e5e5e5] bg-white p-3 sm:p-4">
                 <div className="flex items-start gap-3">
                   <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#fff0f1] text-[#ff4b4b]">
                     <AlertTriangle size={19} />
@@ -3693,7 +3693,7 @@ function VulnerabilitiesPage({ state, onStudy }: { state: AppState; onStudy: () 
             );
           })}
         </div>
-        <AnimatedCard delay={165} className="h-fit rounded-[20px] bg-[#1cb0f6] p-5 text-white shadow-[0_10px_22px_rgba(43,38,101,0.16)]">
+        <AnimatedCard delay={165} className="h-fit rounded-[20px] bg-[#1cb0f6] p-4 text-white shadow-[0_10px_22px_rgba(43,38,101,0.16)] sm:p-5">
           <div className="flex items-center gap-2 text-[13px] font-extrabold">
             <Sparkles size={18} className="text-[#ffc800]" /> Plano de contingência
           </div>
@@ -3754,9 +3754,9 @@ function SettingsPage({
         title="Configurações de revisão"
         description="Ajuste quando uma questão volta para a fila após erros e acertos. As alterações valem para as próximas respostas."
       />
-      <div className="flex w-fit gap-1 rounded-xl border border-[#e5e5e5] bg-white p-1">
+      <div className="grid w-full grid-cols-2 gap-1 rounded-xl border border-[#e5e5e5] bg-white p-1 sm:w-fit">
         <button
-          className={`flex items-center gap-2 rounded-lg px-3 py-2 text-[11px] font-extrabold transition ${
+          className={`flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-[11px] font-extrabold transition ${
             activeTab === "review" ? "bg-[#e9f8dd] text-[#58a700]" : "text-[#8490a0] hover:bg-[#fafafa]"
           }`}
           type="button"
@@ -3765,7 +3765,7 @@ function SettingsPage({
           <RotateCcw size={14} /> Revisão
         </button>
         <button
-          className={`flex items-center gap-2 rounded-lg px-3 py-2 text-[11px] font-extrabold transition ${
+          className={`flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-[11px] font-extrabold transition ${
             activeTab === "account" ? "bg-[#e9f8dd] text-[#58a700]" : "text-[#8490a0] hover:bg-[#fafafa]"
           }`}
           type="button"
@@ -3776,7 +3776,7 @@ function SettingsPage({
       </div>
       {activeTab === "review" ? (
       <form className="grid gap-5 xl:grid-cols-[1.25fr_0.75fr]" onSubmit={submit}>
-        <section className="animate-card-in rounded-[20px] border border-[#e5e5e5] bg-white p-5 sm:p-6">
+        <section className="animate-card-in rounded-[20px] border border-[#e5e5e5] bg-white p-4 sm:p-6">
           <div>
             <h2 className="text-[15px] font-extrabold text-[#354055]">Repetição espaçada</h2>
             <p className="mt-1 text-[11px] font-semibold leading-5 text-[#99a2b0]">
@@ -3827,14 +3827,14 @@ function SettingsPage({
           </div>
           <div className="mt-6 flex justify-end">
             <button
-              className="rounded-xl border-b-4 border-[#46a302] bg-[#58cc02] px-5 py-3 text-[12px] font-extrabold uppercase tracking-[0.5px] text-white transition hover:bg-[#61d808] active:translate-y-0.5 active:border-b-2"
+              className="w-full rounded-xl border-b-4 border-[#46a302] bg-[#58cc02] px-5 py-3 text-[12px] font-extrabold uppercase tracking-[0.5px] text-white transition hover:bg-[#61d808] active:translate-y-0.5 active:border-b-2 sm:w-auto"
               type="submit"
             >
               Salvar configurações
             </button>
           </div>
         </section>
-        <aside className="animate-card-in h-fit rounded-[20px] border border-[#e5e5e5] bg-white p-5 [--card-delay:70ms]">
+        <aside className="animate-card-in h-fit rounded-[20px] border border-[#e5e5e5] bg-white p-4 [--card-delay:70ms] sm:p-5">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#d7ffb8] text-[#58a700]">
             <RotateCcw size={21} />
           </div>
@@ -3879,14 +3879,14 @@ function AccountSettings({ user }: { user: AuthUser }) {
     .toUpperCase();
   return (
     <div className="grid gap-5 xl:grid-cols-[1.25fr_0.75fr]">
-      <section className="animate-card-in rounded-[20px] border border-[#e5e5e5] bg-white p-5 sm:p-6">
+      <section className="animate-card-in rounded-[20px] border border-[#e5e5e5] bg-white p-4 sm:p-6">
         <div className="flex items-center gap-3">
           <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#d7ffb8] text-lg font-extrabold text-[#58a700]">
             {initials}
           </span>
-          <div>
+          <div className="min-w-0">
             <p className="text-[10px] font-extrabold uppercase tracking-[1.5px] text-[#58a700]">Perfil do estudante</p>
-            <h2 className="mt-1 text-lg font-extrabold text-[#354055]">{user.name}</h2>
+            <h2 className="mt-1 truncate text-lg font-extrabold text-[#354055]">{user.name}</h2>
           </div>
         </div>
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
@@ -3900,7 +3900,7 @@ function AccountSettings({ user }: { user: AuthUser }) {
           <AccountField icon={<LockKeyhole size={16} />} label="Senha" value="Protegida e armazenada com segurança" />
         </div>
       </section>
-      <aside className="animate-card-in h-fit rounded-[20px] border border-[#e5e5e5] bg-white p-5 [--card-delay:70ms]">
+      <aside className="animate-card-in h-fit rounded-[20px] border border-[#e5e5e5] bg-white p-4 [--card-delay:70ms] sm:p-5">
         <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#eef9ff] text-[#1cb0f6]">
           <ShieldAlert size={21} />
         </div>
@@ -4019,7 +4019,7 @@ function SimulationPage({
   if (!queue.length) {
     return (
       <div className="mx-auto flex min-h-[68vh] max-w-2xl items-center justify-center">
-        <div className="w-full rounded-[24px] border-2 border-b-4 border-[#e5e5e5] bg-white p-6 sm:p-8">
+        <div className="w-full rounded-[24px] border-2 border-b-4 border-[#e5e5e5] bg-white p-5 sm:p-8">
           <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#d7ffb8] text-[#58a700]">
             <GraduationCap size={27} />
           </div>
@@ -4057,13 +4057,13 @@ function SimulationPage({
           </div>
           <div className="mt-6 flex flex-col justify-end gap-2 sm:flex-row">
             <button
-              className="rounded-xl border-2 border-b-4 border-[#e5e5e5] px-4 py-3 text-[12px] font-extrabold uppercase tracking-[0.5px] text-[#777]"
+              className="w-full rounded-xl border-2 border-b-4 border-[#e5e5e5] px-4 py-3 text-[12px] font-extrabold uppercase tracking-[0.5px] text-[#777] sm:w-auto"
               onClick={onExit}
             >
               Voltar ao painel
             </button>
             <button
-              className="flex items-center justify-center gap-2 rounded-xl border-b-4 border-[#46a302] bg-[#58cc02] px-4 py-3 text-[12px] font-extrabold uppercase tracking-[0.5px] text-white transition hover:bg-[#61d808] disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex w-full items-center justify-center gap-2 rounded-xl border-b-4 border-[#46a302] bg-[#58cc02] px-4 py-3 text-[12px] font-extrabold uppercase tracking-[0.5px] text-white transition hover:bg-[#61d808] disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
               disabled={!pool.length}
               onClick={start}
             >
@@ -4079,7 +4079,7 @@ function SimulationPage({
   if (!question) {
     return (
       <div className="mx-auto flex min-h-[68vh] max-w-xl items-center justify-center">
-        <div className="w-full rounded-[24px] border-2 border-b-4 border-[#e5e5e5] bg-white p-8 text-center">
+        <div className="w-full rounded-[24px] border-2 border-b-4 border-[#e5e5e5] bg-white p-6 text-center sm:p-8">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#d7ffb8] text-[#58a700]">
             <Trophy size={30} />
           </div>
@@ -4109,28 +4109,28 @@ function SimulationPage({
     setHintOpen(false);
   };
   return (
-    <div className="min-h-screen bg-white px-4 py-5 sm:px-6 lg:px-8 lg:py-7">
+    <div className="min-h-screen bg-white px-3 py-4 sm:px-6 lg:px-8 lg:py-7">
       <div className="mx-auto max-w-[980px]">
-        <div className="flex items-center gap-4 sm:gap-6">
+        <div className="flex items-center gap-2 sm:gap-6">
           <button
             aria-label="Sair do simulado"
             className="rounded-xl p-1 text-[#afafaf] transition hover:bg-[#f3f3f3] hover:text-[#777]"
             onClick={onExit}
           >
-            <X size={28} strokeWidth={3} />
+            <X size={24} strokeWidth={3} />
           </button>
-          <div className="h-4 flex-1 overflow-hidden rounded-full bg-[#e5e5e5]">
+          <div className="h-3 flex-1 overflow-hidden rounded-full bg-[#e5e5e5] sm:h-4">
             <div
               className="h-full rounded-full bg-[#58cc02] transition-all duration-500"
               style={{ width: `${((index + (selectedId ? 1 : 0)) / queue.length) * 100}%` }}
             />
           </div>
-          <div className="flex min-w-fit items-center gap-1.5 text-[14px] font-extrabold text-[#ff9600]">
-            <Flame size={21} fill="currentColor" />
+          <div className="flex min-w-fit items-center gap-1 text-[12px] font-extrabold text-[#ff9600] sm:gap-1.5 sm:text-[14px]">
+            <Flame size={18} fill="currentColor" />
             {index + 1}/{queue.length}
           </div>
         </div>
-        <div className="mx-auto max-w-[760px] pb-36 pt-10 sm:pt-16">
+        <div className="mx-auto max-w-[760px] pb-40 pt-8 sm:pb-36 sm:pt-16">
           <div className="flex flex-wrap items-center gap-2">
             <span className="rounded-full bg-[#e9f8dd] px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.5px] text-[#58a700]">
               {subject?.name}
@@ -4142,7 +4142,7 @@ function SimulationPage({
           <p className="mt-8 text-[14px] font-extrabold uppercase tracking-[0.8px] text-[#777]">
             Selecione a resposta correta
           </p>
-          <h1 className="mt-3 text-[22px] font-extrabold leading-9 tracking-[-0.4px] text-[#3c3c3c] sm:text-[28px] sm:leading-10">
+          <h1 className="mt-3 text-[20px] font-extrabold leading-8 tracking-[-0.4px] text-[#3c3c3c] sm:text-[28px] sm:leading-10">
             {question.prompt}
           </h1>
           <button
@@ -4162,7 +4162,7 @@ function SimulationPage({
             {alternativesToDisplay.map((alternative, alternativeIndex) => (
               <div key={alternative.id}>
                 <button
-                  className={`flex w-full items-center gap-4 rounded-2xl border-2 border-b-4 px-4 py-4 text-left transition active:translate-y-0.5 active:border-b-2 ${
+                  className={`flex w-full items-center gap-3 rounded-2xl border-2 border-b-4 px-3 py-3.5 text-left transition active:translate-y-0.5 active:border-b-2 sm:gap-4 sm:px-4 sm:py-4 ${
                     selectedId
                       ? alternative.isCorrect
                         ? "border-[#58cc02] bg-[#f1ffe7] text-[#46a302]"
@@ -4177,7 +4177,7 @@ function SimulationPage({
                     if (alternative.isCorrect) setCorrect((value) => value + 1);
                   }}
                 >
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border-2 border-current text-[13px] font-extrabold opacity-75">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border-2 border-current text-[12px] font-extrabold opacity-75 sm:h-8 sm:w-8 sm:text-[13px]">
                     {answerLabels[alternativeIndex] ?? alternative.label}
                   </span>
                   <span className="flex-1 text-[14px] font-extrabold leading-6 sm:text-[15px]">
@@ -4204,7 +4204,7 @@ function SimulationPage({
               : "border-[#ffc1c1] bg-[#ffdfe0]"
           }`}
         >
-          <div className="mx-auto flex max-w-[980px] flex-col gap-4 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+          <div className="mx-auto flex max-w-[980px] flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:py-5">
             <div className="flex items-center gap-3">
               <div
                 className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/70 ${
@@ -4223,7 +4223,7 @@ function SimulationPage({
               </div>
             </div>
             <button
-              className={`flex items-center justify-center gap-2 rounded-xl border-b-4 px-7 py-3 text-[13px] font-extrabold uppercase tracking-[0.6px] text-white transition active:translate-y-0.5 active:border-b-2 ${
+              className={`flex w-full items-center justify-center gap-2 rounded-xl border-b-4 px-7 py-3 text-[13px] font-extrabold uppercase tracking-[0.6px] text-white transition active:translate-y-0.5 active:border-b-2 sm:w-auto ${
                 selected.isCorrect
                   ? "border-[#46a302] bg-[#58cc02] hover:bg-[#61d808]"
                   : "border-[#d83333] bg-[#ff4b4b] hover:bg-[#ff5b5b]"
