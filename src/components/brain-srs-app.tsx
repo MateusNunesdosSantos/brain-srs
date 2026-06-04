@@ -1625,8 +1625,8 @@ function ReviewPage({
   };
 
   return (
-    <div className="min-h-screen bg-white px-3 py-4 sm:px-6 lg:px-8 lg:py-7">
-      <div className="mx-auto max-w-[980px]">
+    <div className="flex h-screen flex-col overflow-hidden bg-white px-3 py-4 sm:px-6 lg:px-8 lg:py-7">
+      <div className="mx-auto flex min-h-0 w-full max-w-[980px] flex-1 flex-col">
         <div className="flex items-center gap-2 sm:gap-6">
           <button
             aria-label="Sair da revisão"
@@ -1647,7 +1647,11 @@ function ReviewPage({
           </div>
         </div>
 
-        <div className="mx-auto max-w-[760px] pb-40 pt-8 sm:pb-36 sm:pt-16">
+        <div
+          className={`mx-auto min-h-0 w-full max-w-[760px] overflow-y-auto overscroll-contain pt-8 sm:pt-16 ${
+            selectedId ? "pb-44 sm:pb-36" : "pb-8 sm:pb-12"
+          }`}
+        >
           <div className="flex flex-wrap items-center gap-2">
             <span className="rounded-full bg-[#e9f8dd] px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.5px] text-[#58a700]">
               {subject?.name}
@@ -1704,7 +1708,7 @@ function ReviewPage({
               return (
                 <div key={alternative.id}>
                   <button
-                    className={`flex w-full items-center gap-3 rounded-2xl border-2 border-b-4 px-3 py-3.5 text-left transition active:translate-y-0.5 active:border-b-2 sm:gap-4 sm:px-4 sm:py-4 ${tone}`}
+                    className={`flex w-full items-center gap-3 rounded-2xl border-2 border-b-4 px-3 py-3 text-left transition active:translate-y-0.5 active:border-b-2 sm:gap-4 sm:px-4 sm:py-4 ${tone}`}
                     onClick={() => selectAnswer(alternative)}
                   >
                     <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border-2 border-current text-[12px] font-extrabold opacity-75 sm:h-8 sm:w-8 sm:text-[13px]">
@@ -1738,7 +1742,7 @@ function ReviewPage({
               : "border-[#ffc1c1] bg-[#ffdfe0]"
           }`}
         >
-          <div className="mx-auto flex max-w-[980px] flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:py-5">
+          <div className="mx-auto flex max-w-[980px] flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:py-5">
             <div className="flex items-center gap-3">
               <div
                 className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/70 ${
@@ -1748,7 +1752,7 @@ function ReviewPage({
                 {selected.isCorrect ? <CheckCircle2 size={27} /> : <XCircle size={27} />}
               </div>
               <div>
-                <p className={`text-[18px] font-extrabold ${selected.isCorrect ? "text-[#58a700]" : "text-[#ea2b2b]"}`}>
+                <p className={`text-[16px] font-extrabold sm:text-[18px] ${selected.isCorrect ? "text-[#58a700]" : "text-[#ea2b2b]"}`}>
                   {selected.isCorrect ? "Muito bem!" : "Quase lá!"}
                 </p>
                 <p className={`mt-0.5 text-[12px] font-bold ${selected.isCorrect ? "text-[#6da83e]" : "text-[#cf5d5d]"}`}>
@@ -1759,7 +1763,7 @@ function ReviewPage({
               </div>
             </div>
             <button
-              className={`flex w-full items-center justify-center gap-2 rounded-xl border-b-4 px-7 py-3 text-[13px] font-extrabold uppercase tracking-[0.6px] text-white transition active:translate-y-0.5 active:border-b-2 sm:w-auto ${
+              className={`flex w-full items-center justify-center gap-2 rounded-xl border-b-4 px-7 py-2.5 text-[13px] font-extrabold uppercase tracking-[0.6px] text-white transition active:translate-y-0.5 active:border-b-2 sm:w-auto sm:py-3 ${
                 selected.isCorrect
                   ? "border-[#46a302] bg-[#58cc02] hover:bg-[#61d808]"
                   : "border-[#d83333] bg-[#ff4b4b] hover:bg-[#ff5b5b]"
@@ -4109,8 +4113,8 @@ function SimulationPage({
     setHintOpen(false);
   };
   return (
-    <div className="min-h-screen bg-white px-3 py-4 sm:px-6 lg:px-8 lg:py-7">
-      <div className="mx-auto max-w-[980px]">
+    <div className="flex h-screen flex-col overflow-hidden bg-white px-3 py-4 sm:px-6 lg:px-8 lg:py-7">
+      <div className="mx-auto flex min-h-0 w-full max-w-[980px] flex-1 flex-col">
         <div className="flex items-center gap-2 sm:gap-6">
           <button
             aria-label="Sair do simulado"
@@ -4130,7 +4134,11 @@ function SimulationPage({
             {index + 1}/{queue.length}
           </div>
         </div>
-        <div className="mx-auto max-w-[760px] pb-40 pt-8 sm:pb-36 sm:pt-16">
+        <div
+          className={`mx-auto min-h-0 w-full max-w-[760px] overflow-y-auto overscroll-contain pt-8 sm:pt-16 ${
+            selectedId ? "pb-44 sm:pb-36" : "pb-8 sm:pb-12"
+          }`}
+        >
           <div className="flex flex-wrap items-center gap-2">
             <span className="rounded-full bg-[#e9f8dd] px-3 py-1.5 text-[11px] font-extrabold uppercase tracking-[0.5px] text-[#58a700]">
               {subject?.name}
@@ -4162,7 +4170,7 @@ function SimulationPage({
             {alternativesToDisplay.map((alternative, alternativeIndex) => (
               <div key={alternative.id}>
                 <button
-                  className={`flex w-full items-center gap-3 rounded-2xl border-2 border-b-4 px-3 py-3.5 text-left transition active:translate-y-0.5 active:border-b-2 sm:gap-4 sm:px-4 sm:py-4 ${
+                  className={`flex w-full items-center gap-3 rounded-2xl border-2 border-b-4 px-3 py-3 text-left transition active:translate-y-0.5 active:border-b-2 sm:gap-4 sm:px-4 sm:py-4 ${
                     selectedId
                       ? alternative.isCorrect
                         ? "border-[#58cc02] bg-[#f1ffe7] text-[#46a302]"
@@ -4204,7 +4212,7 @@ function SimulationPage({
               : "border-[#ffc1c1] bg-[#ffdfe0]"
           }`}
         >
-          <div className="mx-auto flex max-w-[980px] flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:py-5">
+          <div className="mx-auto flex max-w-[980px] flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:py-5">
             <div className="flex items-center gap-3">
               <div
                 className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/70 ${
@@ -4214,7 +4222,7 @@ function SimulationPage({
                 {selected.isCorrect ? <CheckCircle2 size={27} /> : <XCircle size={27} />}
               </div>
               <div>
-                <p className={`text-[18px] font-extrabold ${selected.isCorrect ? "text-[#58a700]" : "text-[#ea2b2b]"}`}>
+                <p className={`text-[16px] font-extrabold sm:text-[18px] ${selected.isCorrect ? "text-[#58a700]" : "text-[#ea2b2b]"}`}>
                   {selected.isCorrect ? "Muito bem!" : "Quase lá!"}
                 </p>
                 <p className={`mt-0.5 text-[12px] font-bold ${selected.isCorrect ? "text-[#6da83e]" : "text-[#cf5d5d]"}`}>
@@ -4223,7 +4231,7 @@ function SimulationPage({
               </div>
             </div>
             <button
-              className={`flex w-full items-center justify-center gap-2 rounded-xl border-b-4 px-7 py-3 text-[13px] font-extrabold uppercase tracking-[0.6px] text-white transition active:translate-y-0.5 active:border-b-2 sm:w-auto ${
+              className={`flex w-full items-center justify-center gap-2 rounded-xl border-b-4 px-7 py-2.5 text-[13px] font-extrabold uppercase tracking-[0.6px] text-white transition active:translate-y-0.5 active:border-b-2 sm:w-auto sm:py-3 ${
                 selected.isCorrect
                   ? "border-[#46a302] bg-[#58cc02] hover:bg-[#61d808]"
                   : "border-[#d83333] bg-[#ff4b4b] hover:bg-[#ff5b5b]"
