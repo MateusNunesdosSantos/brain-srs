@@ -57,6 +57,15 @@ button {
   background: #d6d6d6;
 }
 
+.scrollbar-hidden {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+
 @keyframes slide-up {
   from {
     transform: translateY(12px);

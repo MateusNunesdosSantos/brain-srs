@@ -1648,7 +1648,7 @@ function ReviewPage({
         </div>
 
         <div
-          className={`mx-auto min-h-0 w-full max-w-[760px] overflow-y-auto overscroll-contain pt-8 sm:pt-16 ${
+          className={`scrollbar-hidden mx-auto min-h-0 w-full max-w-[760px] overflow-y-auto overscroll-contain pt-8 sm:pt-16 ${
             selectedId ? "pb-44 sm:pb-36" : "pb-8 sm:pb-12"
           }`}
         >
@@ -4135,7 +4135,7 @@ function SimulationPage({
           </div>
         </div>
         <div
-          className={`mx-auto min-h-0 w-full max-w-[760px] overflow-y-auto overscroll-contain pt-8 sm:pt-16 ${
+          className={`scrollbar-hidden mx-auto min-h-0 w-full max-w-[760px] overflow-y-auto overscroll-contain pt-8 sm:pt-16 ${
             selectedId ? "pb-44 sm:pb-36" : "pb-8 sm:pb-12"
           }`}
         >
