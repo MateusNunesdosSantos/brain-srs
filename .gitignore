@@ -1,9 +1,0 @@
-.next/
-node_modules/
-data/*.sqlite
-data/*.sqlite-shm
-data/*.sqlite-wal
-data/backups/
-dev-server.log
-dev-server.error.log
-*.png
