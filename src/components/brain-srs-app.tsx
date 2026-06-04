@@ -1190,7 +1190,7 @@ function Dashboard({
         </button>
       </section>
 
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <section className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
         <MetricCard
           icon={<BookMarked size={20} />}
           iconClass="bg-[#d7ffb8] text-[#58cc02]"
@@ -1405,13 +1405,13 @@ function MetricCard({
 }) {
   return (
     <div
-      className="animate-card-in rounded-[20px] border-2 border-b-4 border-[#e5e5e5] bg-white p-4"
+      className="animate-card-in rounded-[20px] border-2 border-b-4 border-[#e5e5e5] bg-white p-3 sm:p-4"
       style={{ "--card-delay": `${delay}ms` } as CSSProperties}
     >
-      <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${iconClass}`}>{icon}</div>
-      <p className="mt-4 text-[11px] font-bold text-[#97a0af]">{title}</p>
-      <p className="mt-1 text-[24px] font-extrabold tracking-[-0.7px] text-[#2b354a]">{value}</p>
-      <p className="mt-1 text-[10px] font-bold text-[#a1a9b6]">{detail}</p>
+      <div className={`flex h-9 w-9 items-center justify-center rounded-xl sm:h-10 sm:w-10 ${iconClass}`}>{icon}</div>
+      <p className="mt-3 text-[10px] font-bold text-[#97a0af] sm:mt-4 sm:text-[11px]">{title}</p>
+      <p className="mt-1 text-[21px] font-extrabold tracking-[-0.7px] text-[#2b354a] sm:text-[24px]">{value}</p>
+      <p className="mt-1 line-clamp-2 text-[9px] font-bold leading-4 text-[#a1a9b6] sm:text-[10px]">{detail}</p>
     </div>
   );
 }
@@ -3543,7 +3543,7 @@ function StatsPage({ state }: { state: AppState }) {
         title="Estatísticas de retenção"
         description="Acompanhe a evolução da memória e identifique onde seu esforço gera mais resultado."
       />
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <section className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
         <MetricCard delay={0} icon={<Activity size={20} />} iconClass="bg-[#d7ffb8] text-[#58cc02]" title="Revisões totais" value={String(totalReviews)} detail="Histórico consolidado" />
         <MetricCard delay={55} icon={<Target size={20} />} iconClass="bg-[#e9f9f1] text-[#58a700]" title="Retenção global" value={`${retention}%`} detail="Acertos em todas as respostas" />
         <MetricCard delay={110} icon={<Clock3 size={20} />} iconClass="bg-[#eaf4ff] text-[#1cb0f6]" title="Tempo por questão" value={`${avgTime}s`} detail="Média de resposta" />
