@@ -1,110 +1,187 @@
 # BrainSRS
 
-Aplicação Next.js para estudo com repetição espaçada, autenticação e persistência SQLite local.
+Projeto separado em dois diretórios independentes: frontend Next.js e backend Node.js/TypeScript.
 
-## Executar
+## Estrutura
+
+```text
+frontend/  Next.js, React, Tailwind e aplicacao web responsiva
+backend/   Express, Prisma, PostgreSQL e API HTTP
+```
+
+O frontend não acessa o banco diretamente. Ele consome o backend por HTTP usando
+`NEXT_PUBLIC_API_BASE_URL`.
+
+## Executar Localmente
 
 Requer Node.js 22 ou superior.
 
+Backend:
+
 ```bash
+cd backend
 npm install
 npm run dev
 ```
 
-A aplicação inicia em `http://localhost:3000`. O banco é criado automaticamente em
-`data/brainsrs.sqlite`. Os dados existentes são vinculados à conta local de teste:
+Frontend:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+URLs padrão:
+
+```text
+Frontend: http://localhost:3000
+Backend:  http://localhost:3001
+Health:   http://localhost:3001/health
+```
+
+Conta local de teste:
 
 ```text
 E-mail: mateusnunesmds@gmail.com
 Senha: 123
 ```
 
-Essa senha curta existe apenas para testes locais. Novas contas exigem pelo menos seis caracteres.
+Essa senha curta existe apenas para teste local.
 
-## Backend local
+## Backend
 
-O backend usa Route Handlers do Next.js e o módulo nativo `node:sqlite`, sem serviço externo ou
-dependência de banco adicional.
+O backend fica em `backend/` e usa:
 
-- `POST /api/auth/register`: cria uma conta e inicia uma sessão.
-- `POST /api/auth/login`: valida as credenciais e inicia uma sessão.
-- `POST /api/auth/logout`: encerra a sessão atual.
-- `POST /api/auth/onboarding`: marca o tour inicial como concluído.
-- `GET /api/state`: retorna o snapshot consolidado do usuário autenticado.
-- `POST /api/actions`: executa mutações persistentes do usuário autenticado.
+- Node.js + TypeScript
+- Express
+- Prisma
+- PostgreSQL
+- Zod para validação
+- Sessões persistidas no banco
+- Cookies `HttpOnly` para web
+- `Authorization: Bearer` para SPA/mobile
 
-As sessões usam cookies `HttpOnly`, expiram em 30 dias e são armazenadas no SQLite. As senhas são
-armazenadas com salt individual e derivação `scrypt`.
+Endpoints principais:
 
-## Planos e Primeiro Acesso
+```text
+GET  /health
+GET  /api/state
+POST /api/actions
+POST /api/auth/register
+POST /api/auth/login
+POST /api/auth/logout
+POST /api/auth/onboarding
+```
 
-Novas contas começam no plano Free e são direcionadas automaticamente para a Biblioteca no primeiro
-acesso. Um tour explica como criar cadernos, matérias e questões e pode ser concluído ou pulado.
-Essa escolha é persistida na conta.
+Configuração local do backend:
 
-- Free: biblioteca, revisões, simulados e configurações.
-- Pro: inclui Estatísticas e Vulnerabilidades.
+```text
+backend/.env
+```
 
-As ações disponíveis cobrem importação confirmada, criação de cadernos, matérias e questões,
-registro de respostas, sessões persistentes de revisão e configuração do algoritmo. Payloads
-recebidos pela API são validados com Zod antes de chegar ao banco.
+Exemplo:
 
-O cálculo de estabilidade, dificuldade, jitter, cooldown e `next_review` ocorre no servidor. Cada
-resposta recebe uma chave idempotente para impedir duplicação em retries HTTP. Uma resposta somente
-é aceita quando pertence a uma sessão ativa de revisão criada pelo servidor.
+```env
+DATABASE_URL="postgresql://postgres:SUA_SENHA@localhost:5432/brainsrs?schema=public"
+BACKEND_PORT="3001"
+FRONTEND_ORIGIN="http://localhost:3000,http://127.0.0.1:3000"
+SESSION_COOKIE_SECURE="false"
+```
 
-## Schema SQLite
+O PostgreSQL local usa o banco `brainsrs`. O backup do SQLite anterior permanece em
+`backend/prisma/data/` apenas para recuperação e auditoria da migração.
 
-- `notebooks`
-- `subjects`
-- `questions`
-- `alternatives`
-- `progress`
-- `review_logs`
-- `cooldown`
-- `completed_dates`
-- `srs_settings`
-- `users`
-- `sessions`
-- `review_sessions`
-- `review_session_items`
-- `database_meta`
+## Prisma
 
-O schema usa foreign keys, índices para consultas frequentes e WAL para permitir leituras durante
-gravações. Cadernos, matérias, questões, progresso, logs e configurações são isolados por usuário.
+O schema está em:
 
-O banco mantém `schema_version` em `database_meta`; antes de aplicar uma nova versão de schema, a
-aplicação cria um backup em `data/backups`.
+```text
+backend/prisma/schema.prisma
+```
 
-## Configurações de Revisão
+Comandos:
 
-A rota `http://localhost:3000/configuracoes` permite ajustar os parâmetros usados nas próximas
-respostas:
+```bash
+cd backend
+npm run prisma:generate
+npm run prisma:deploy
+```
 
-- cooldown mínimo e máximo após erro;
-- intervalo após o primeiro acerto;
-- multiplicador dos intervalos após os próximos acertos.
+O schema é criado e atualizado pelas migrations do Prisma.
 
-Os valores são persistidos na tabela `srs_settings`. Revisões já agendadas não são reescritas
-automaticamente.
+## Frontend
+
+O frontend fica em `frontend/`.
+
+Comandos:
+
+```bash
+cd frontend
+npm run dev
+npm run build
+```
+
+Em desenvolvimento, o frontend usa `http://localhost:3001` como backend padrão. Para outro backend:
+
+```powershell
+$env:NEXT_PUBLIC_API_BASE_URL="https://api.seudominio.com"
+npm run dev
+```
+
+## Mobile
+
+A integracao com Capacitor foi removida. Uma nova estrategia mobile sera definida futuramente.
+
+## Segurança Atual
+
+Já existe:
+
+- isolamento por usuário no backend;
+- validação Zod em todas as ações principais;
+- senha com salt individual e `scrypt`;
+- sessão armazenada no PostgreSQL;
+- cookie `HttpOnly` na web;
+- token Bearer para clientes de API;
+- CORS configurável por `FRONTEND_ORIGIN`;
+- rate limit simples para login/cadastro.
+
+Antes de produção pública, ainda precisa:
+
+- HTTPS obrigatório;
+- rate limit robusto com Redis ou serviço externo;
+- refresh token rotativo para futuros clientes externos;
+- proteção CSRF se cookies forem usados em produção;
+- headers de segurança;
+- reset de senha por email;
+- verificação de email;
+- logs/auditoria;
+- backups automáticos;
+- backup automatizado, monitoramento e alta disponibilidade do PostgreSQL.
 
 ## Verificar
 
 ```bash
+cd backend
 npm run lint
 npm run build
-npm test
+
+cd ../frontend
+npm run lint
+npm run build
 npm run test:backend
+```
+
+Para testes de UI, suba frontend e backend antes:
+
+```bash
+cd backend
+npm run dev
+
+cd ../frontend
+npm run dev
 npm run test:ui
 npm run test:library
 npm run test:review-filter
 npm run test:theme
 ```
-
-## Próximos Incrementos
-
-Antes de publicar:
-
-1. Migrar o scheduler simplificado para uma implementação FSRS completa e testada.
-2. Implementar cron de notificações.
-3. Migrar para PostgreSQL se houver múltiplas instâncias ou alta concorrência.
