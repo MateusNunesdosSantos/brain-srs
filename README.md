@@ -60,7 +60,7 @@ O backend fica em `backend/` e usa:
 - Zod para validação
 - Sessões persistidas no banco
 - Cookies `HttpOnly` para web
-- `Authorization: Bearer` para SPA/mobile
+- `Authorization: Bearer` para clientes externos ou futuros clientes de API
 
 Endpoints principais:
 
@@ -131,7 +131,9 @@ npm run dev
 
 ## Mobile
 
-A integracao com Capacitor foi removida. Uma nova estrategia mobile sera definida futuramente.
+Nao existe modulo mobile nativo ativo neste repositorio. A antiga integracao com
+Capacitor e a pasta `mobile/` foram removidas; o produto atual deve ser tratado
+como aplicacao web responsiva/PWA.
 
 ## Segurança Atual
 
