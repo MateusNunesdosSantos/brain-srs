@@ -529,6 +529,7 @@ The following optimizations and hardening items were implemented as part of the 
 - **Baseline Metrics**: Collected baseline metrics for catalog, challenges, and admin endpoints in `docs/API_BASELINE_2026-06-22.md`.
 - **HTTP Compression & Caching**: Validated the gzip middleware and confirmed caching compatibility using `Vary: Origin, Accept-Encoding` headers.
 - **Offline Cryptography & Locks**: Secured the offline IndexedDB queue using AES-GCM 256-bit encryption and added sync locks to prevent duplicate submissions.
+- **Email Verification & Password Reset**: Fully integrated front-end screens `/recuperar-senha`, `/redefinir-senha` and `/verificar-email` with pre-existing backend endpoints, added a visual validation banner to the main dashboard layout, upgraded the backend mailer to support responsive HTML emails using SMTP (fully compatible with Gmail App Passwords), and added a connection test script (`backend/scripts/send-test-email.ts`).
 
 ## Working Guidelines for Future Agents
 
