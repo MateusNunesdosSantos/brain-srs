@@ -1,6 +1,6 @@
 # BrainSRS - Project Context
 
-Last updated: 2026-06-23
+Last updated: 2026-06-25
 
 This file is a compact project map for future prompts and agent sessions. It
 does not replace reading the touched files before changing code, but it should
@@ -30,15 +30,14 @@ Main product areas:
 - PWA/offline support: manifest, service worker, offline page and queued
   frontend mutations.
 
-Mobile/Capacitor is not active. The old tracked `mobile/` app was manually
-removed on purpose. Do not restore it unless explicitly requested. The current
-product is the responsive web/PWA app under `frontend/`.
+The native mobile application is located under the `mobile/` directory, built using React Native and Expo (SDK 54). It replicates the features and the responsive layout of the web application.
 
 ## Repository Layout
 
 ```text
 backend/       Express API, Prisma schema/migrations, catalog/admin/auth logic
 frontend/      Next.js app, Tailwind CSS, PWA assets, main BrainSRS UI
+mobile/        Native React Native / Expo mobile app matching 100% of web features
 src/           Legacy/shared app component copy; current app uses frontend/src
 .github/       GitHub Actions CI
 docs/          Project context and future cross-project documentation
@@ -80,6 +79,16 @@ Frontend:
 - PWA/service worker
 - Playwright-core based validation scripts
 
+Mobile:
+
+- React Native & Expo SDK 54
+- React 19 / React Native 0.81
+- Expo Router
+- TypeScript
+- NativeWind v4 (Tailwind CSS 3 configuration)
+- Lucide React Native icons
+- Secure Store and Async Storage for offline state and token storage
+
 ## Local Development
 
 Backend:
@@ -101,11 +110,20 @@ copy .env.example .env.local
 npm run dev
 ```
 
+Mobile:
+
+```bash
+cd mobile
+npm install
+npx expo start --clear
+```
+
 Default URLs:
 
 ```text
 Frontend: http://localhost:3000
 Backend:  http://localhost:3001
+Mobile:   http://localhost:8081 (Metro Bundler)
 Health:   http://localhost:3001/health
 Swagger:  http://localhost:3001/docs
 ```
@@ -530,6 +548,70 @@ The following optimizations and hardening items were implemented as part of the 
 - **HTTP Compression & Caching**: Validated the gzip middleware and confirmed caching compatibility using `Vary: Origin, Accept-Encoding` headers.
 - **Offline Cryptography & Locks**: Secured the offline IndexedDB queue using AES-GCM 256-bit encryption and added sync locks to prevent duplicate submissions.
 - **Email Verification & Password Reset**: Fully integrated front-end screens `/recuperar-senha`, `/redefinir-senha` and `/verificar-email` with pre-existing backend endpoints, added a visual validation banner to the main dashboard layout, upgraded the backend mailer to support responsive HTML emails using SMTP (fully compatible with Gmail App Passwords), and added a connection test script (`backend/scripts/send-test-email.ts`).
+
+## Native Mobile Application Development (2026-06-24)
+
+Implemented a native mobile application using React Native and Expo (SDK 54) inside the `mobile/` directory to mirror the features and visual design of the responsive web platform:
+
+- **Initial Setup & SDK Configuration**: Initialized the project with Expo SDK 54, configured TSX, Babel, and NativeWind v4 (Tailwind CSS 3) to process layout designs.
+- **Visual Design Parity & Styling Hardening**: Built cards, buttons, rankings, challenges, dashboard screens, and simulations matching the Duolingo-like Portuguese study app style. Corrected white-on-white text issues on native buttons by fully migrating status styles to Tailwind classes.
+- **Client API & Auth Flow**: Implemented securely stored token caching (`secure-store` and `async-storage`) and API request handlers mimicking the web PWA architecture, routing dynamic endpoints to localhost or the active host computer's IP address.
+- **Authentication Screens Redesign**: Rewrote the login, register, forgot password, reset password, and verification screens using native `StyleSheet` styling. This resolved compatibility and rendering race condition issues in the React 19 / NativeWind v4 css-interop compiler.
+- **Stateless/Token Auth & CSRF Bypass**: Redirected mobile authentication to `/api/auth/token/login` to bypass stateful web cookie/CSRF checks. Updated backend registration `/api/auth/register` to return tokens directly. Created a simple `_layout.tsx` nested stack for the `(auth)` group.
+- **Navigation Guard & Global Context**: Refactored `useAuth.ts` into a global `AuthProvider` React Context. Set up a global navigation guard in `_layout.tsx` checking for access tokens and redirecting unauthorized users back to the `/login` screen.
+- **Redesigned Main Navigation Hub & Perfil**: Transformed the Perfil tab into a complete navigation hub displaying user initials avatar placeholders, XP, and streak badges, matching the layout of the web frontend with clean entry points to all sub-screens.
+- **Completed Feature Parity Screens**:
+  - *Estatísticas*: Renders progress bars per subject and a visual 7x4 weekly review consistency heatmap.
+  - *Vulnerabilidades*: Mapped critical errors notebook mapping questions with 3+ mistakes with export options to copy summaries to the clipboard.
+  - *Configurações*: Designed a 6-tab configurations view supporting algorithm updates, name edits, device sessions rollback, support mail linking, and backup/import JSON fields.
+- **Interactive Review & Study Screens**:
+  - Rebuilt the **Revisar** study screen as a tab screen (`(tabs)/revisar.tsx`), implementing dynamic hiding of the bottom tab bar during active sessions to maximize focus.
+  - Aligned **Estudar** (`estudar.tsx`) behavior with the web dashboard, adding seeded question shuffling (`shuffleAlternatives`), lightbulb hint toggles, and correct/wrong bottom banners.
+  - Redesigned alternative/choice elements on both review and study screens to match the premium web borders, including custom option letters (A, B, C, D) and colored highlight states.
+- **Library Management & Tree-View Structure**:
+  - Rebuilt **Biblioteca** (`(tabs)/biblioteca.tsx`) to display a collapsible tree list of notebooks, subjects, and questions.
+  - Built a tab selector to filter between catalog-installed ("Oficiais") and custom ("Importados") notebooks.
+  - Added a fully-functional settings screen for notebook properties in `editar-caderno.tsx`.
+- **Custom JSON Imports & Documents Picker**: Enabled import functions inside `biblioteca.tsx` that let users upload entire libraries or append questions to specific subjects via `expo-document-picker` or text area clipboard pasting.
+- **Bugfixes & Layout Hardening**:
+  - *Subject Icons Alignment*: Centered the Book icon inside the progress rings by applying absolute sizing (`w-[90px] h-[90px]`) and centering constraints.
+  - *NativeWind shadow-sm Crash Fix*: Resolved the `Couldn't find a navigation context` crash occurring when toggling the "Importados" tab button. The crash was triggered by a NativeWind interop race condition when conditionally applying the `shadow-sm` class during state updates; replaced it with a standard React Native style shadow object.
+- **No-Header Edge-to-Edge Canvas**: Configured global and tab layouts to hide React Native headers, resulting in a cleaner edge-to-edge layout matching the web app.
+
+### Mobile UX and Challenges Follow-up (2026-06-25)
+
+Recent mobile refinements focused on challenge parity, navigation polish and
+study feedback:
+
+- **Challenge Screen Parity Upgrade**: Rebuilt `mobile/app/(tabs)/desafios.tsx`
+  from a static placeholder into a full challenge flow using the same backend
+  endpoints as web. The screen now supports subject loading, friends loading,
+  challenge creation, invite acceptance/decline, cancellation, match lobby,
+  in-progress question answering, result states and ticket collection.
+- **Challenge UI Hardening**: Upgraded the challenge setup flow with richer
+  cards for ranking, rival selection and arena selection, explicit XP values per
+  question-count option, a visible primary action button, and a dedicated
+  "partida pronta" screen with a clear "Comecar partida" CTA before the 3-2-1
+  countdown.
+- **Bottom Navigation Rework**: Restyled the mobile tab bar to more closely
+  match the mobile web navigation, including compact floating tabs, active pill
+  highlights, larger icon treatment and a "Mais" entry. Moved `Biblioteca` and
+  `Rankings` access out of the visible tab bar and into the Perfil hub while
+  preserving both routes as hidden tab screens (`href: null`) for direct
+  navigation.
+- **Contextual Tab Bar Hiding**: Extended bottom-tab hiding so challenge
+  countdown and active challenge question screens hide the tab bar just like the
+  focused review flow. Updated both `desafios.tsx` and `revisar.tsx` to restore
+  the new floating tab-bar style after focused sessions end.
+- **Shared Challenge API Layer**: Expanded `mobile/src/services/client-api.ts`
+  with challenge-, ranking- and friendship-related request helpers and added
+  missing mobile auth user fields in `useAuth.ts` such as
+  `challengeTickets`, `weeklyXp` and `adminRole`.
+- **Answer Feedback Audio**: Added local mobile answer feedback sounds using
+  `expo-audio`, with short bundled WAV assets and a shared
+  `mobile/src/services/feedback-sound.ts` helper. `Estudar`, `Revisar` and
+  `Desafios` now play correct/incorrect sounds when responses are verified,
+  respecting `state.settings.soundEnabled` from cached mobile state.
 
 ## Working Guidelines for Future Agents
 
