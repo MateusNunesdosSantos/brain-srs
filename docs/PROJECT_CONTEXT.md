@@ -620,6 +620,12 @@ study feedback:
   - *UI Refinements*: Removed bulky card containers from subjects on the home screen and study pack screens. Solved scroll overflow cuts by increasing bottom content paddings to `104` and `120`. Sorted subjects by completion and group (Oficiais vs Importadas).
   - *Study & Review Polish*: Swapped tabs to make `Estudar` the home tab, linked real review counts to the bottom navigation bar, added a congratulations modal upon completing reviews, and removed unnecessary scrolls and headers on the review screen.
 
+- **Mobile Assets, Splash, and Response Time Optimizations (2026-06-25)**:
+  - *Icon Customization*: Copied the brain icon (`icon-512.png`) from frontend to `mobile/assets/images/icon.png` and `android-icon-foreground.png`. Updated `"name": "BrainSRS"`, `"backgroundColor": "#58cc02"`, and removed unused `adaptiveIcon` keys in [app.json](file:///d:/Projetos/BrainSRS%20v2/mobile/app.json) to set correct Android adaptive icon layers.
+  - *Pre/Post Login Splash Screen*: Created [splash.tsx](file:///d:/Projetos/BrainSRS%20v2/mobile/app/splash.tsx) with a green background and pulsating brain animation. Integrated it in [_layout.tsx](file:///d:/Projetos/BrainSRS%20v2/mobile/app/_layout.tsx) to appear both at startup (pre-login) and after successful registration or login (post-login). Modified `expo-splash-screen` in [app.json](file:///d:/Projetos/BrainSRS%20v2/mobile/app.json) to use a green background, avoiding a white native pre-splash.
+  - *Immediate Answer Response*: Reworked [revisar.tsx](file:///d:/Projetos/BrainSRS%20v2/mobile/app/%28tabs%29/revisar.tsx) to check answers locally on the device for instant user feedback and audio cue triggers. Offloaded spaced repetition updates to background promises, resolving them transparently when clicking "Continuar".
+  - *Instant Lesson Completion*: Optimized [estudar.tsx](file:///d:/Projetos/BrainSRS%20v2/mobile/app/%28tabs%29/estudar.tsx) to immediately transition to the completion XP summary modal and execute the backend completion call `/api/catalog/complete` in background.
+
 ## Working Guidelines for Future Agents
 
 - Before editing, read the exact files being changed; this context is a map,
