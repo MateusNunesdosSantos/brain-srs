@@ -613,6 +613,13 @@ study feedback:
   `Desafios` now play correct/incorrect sounds when responses are verified,
   respecting `state.settings.soundEnabled` from cached mobile state.
 
+- **Mobile Polish & Standalone Build (2026-06-25)**:
+  - *APK Build Setup*: Created [eas.json](file:///d:/Projetos/BrainSRS%20v2/mobile/eas.json) preview profile with APK build type and added Android package `com.mateus.brainsrs` to [app.json](file:///d:/Projetos/BrainSRS%20v2/mobile/app.json). Installed `expo-system-ui` and `expo-asset` to solve Expo prebuild errors.
+  - *Split Repository*: Separated the mobile source code into its own repository: [mobile-brainsrs](https://github.com/MateusNunesdosSantos/mobile-brainsrs).
+  - *Backend Integration*: Configured [client-api.ts](file:///d:/Projetos/BrainSRS%20v2/mobile/src/services/client-api.ts) to point to the production Vercel backend (`https://backend-brainsrs.vercel.app`).
+  - *UI Refinements*: Removed bulky card containers from subjects on the home screen and study pack screens. Solved scroll overflow cuts by increasing bottom content paddings to `104` and `120`. Sorted subjects by completion and group (Oficiais vs Importadas).
+  - *Study & Review Polish*: Swapped tabs to make `Estudar` the home tab, linked real review counts to the bottom navigation bar, added a congratulations modal upon completing reviews, and removed unnecessary scrolls and headers on the review screen.
+
 ## Working Guidelines for Future Agents
 
 - Before editing, read the exact files being changed; this context is a map,
