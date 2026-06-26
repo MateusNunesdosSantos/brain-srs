@@ -640,6 +640,10 @@ study feedback:
   - *Success Modal Notification*: Implemented a clean, animated success modal that triggers upon sending a request, with a direct button to return to the friends list.
   - *Enhanced Pending Invites Card*: Redesigned "Solicitações Recebidas" to show the sender's avatar, name, and ranking position.
 
+- **Mobile Study Trail Zigzag Redesign & Question Player Improvements (2026-06-26)**:
+  - *Duolingo-style Zigzag Trail*: Created a custom `TrailMap` component in React Native using `react-native-svg` and mapped Lucide icons, arranging nodes in an alternating offset zigzag line (`30%`/`50%`/`70%`/`50%`) mimicking the web version.
+  - *Study Lesson Player Re-queuing*: Refactored the study lesson player to re-queue incorrect questions by appending them to the end of the active queue. Users must answer all questions correctly to complete the lesson and earn XP. Early exit awards no XP.
+
 ## Working Guidelines for Future Agents
 
 - Before editing, read the exact files being changed; this context is a map,
