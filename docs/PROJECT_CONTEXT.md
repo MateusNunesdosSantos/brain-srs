@@ -633,6 +633,13 @@ study feedback:
   - *Verification Badge*: Added a real-time e-mail verification badge with status lights to the student profile card in [perfil.tsx](file:///d:/Projetos/BrainSRS%20v2/mobile/app/%28tabs%29/perfil.tsx).
   - *Catalog Spinner & Width Lock*: Enhanced the catalog modal inside [estudar.tsx](file:///d:/Projetos/BrainSRS%20v2/mobile/app/%28tabs%29/estudar.tsx) with a local `ActivityIndicator` on the installing card button and set a fixed button size of `110px` to prevent layout resizing.
 
+- **Mobile Friends Flow & Ranking Placement Improvements (2026-06-26)**:
+  - *Friend Request Actions Bugfix*: Fixed undefined `item.id` error in Accept/Remove buttons inside rankings tab by shifting calls to `item.friendshipId`.
+  - *Dynamic Friend Search & Preview*: Added `searchFriendRequest` endpoint (`/api/friends/search`) in backend, returning found users with calculated weekly ranking placement, name, and profile picture.
+  - *Richer Friend Search UI*: Redesigned "Adicionar Amigo" to look up target users beforehand, showing their name, avatar/initials, and ranking placement in a card preview before adding them.
+  - *Success Modal Notification*: Implemented a clean, animated success modal that triggers upon sending a request, with a direct button to return to the friends list.
+  - *Enhanced Pending Invites Card*: Redesigned "Solicitações Recebidas" to show the sender's avatar, name, and ranking position.
+
 ## Working Guidelines for Future Agents
 
 - Before editing, read the exact files being changed; this context is a map,
