@@ -626,6 +626,13 @@ study feedback:
   - *Immediate Answer Response*: Reworked [revisar.tsx](file:///d:/Projetos/BrainSRS%20v2/mobile/app/%28tabs%29/revisar.tsx) to check answers locally on the device for instant user feedback and audio cue triggers. Offloaded spaced repetition updates to background promises, resolving them transparently when clicking "Continuar".
   - *Instant Lesson Completion*: Optimized [estudar.tsx](file:///d:/Projetos/BrainSRS%20v2/mobile/app/%28tabs%29/estudar.tsx) to immediately transition to the completion XP summary modal and execute the backend completion call `/api/catalog/complete` in background.
 
+- **Email Verification, Android UI Caret & Catalog Polish (2026-06-25)**:
+  - *6-Digit Verification Validation*: Changed backend `tokenSchema` in [validation.ts](file:///d:/Projetos/BrainSRS%20v2/backend/src/shared/validation.ts) to permit 6-digit confirmation codes.
+  - *Immediate Verification State Update*: Updated `handleVerify` in [verify-email.tsx](file:///d:/Projetos/BrainSRS%20v2/mobile/app/%28auth%29/verify-email.tsx) to call `fetchState()` immediately upon success to synchronize the local state and remove the warning banner from the profile screen in real-time.
+  - *Android Blinking Caret Fix*: Configured [app.json](file:///d:/Projetos/BrainSRS%20v2/mobile/app.json) with `"userInterfaceStyle": "light"` and added `cursorColor` and `caretHidden={false}` to [login.tsx](file:///d:/Projetos/BrainSRS%20v2/mobile/app/%28auth%29/login.tsx) to prevent Android MIUI system mode from drawing an invisible white caret on a white background.
+  - *Verification Badge*: Added a real-time e-mail verification badge with status lights to the student profile card in [perfil.tsx](file:///d:/Projetos/BrainSRS%20v2/mobile/app/%28tabs%29/perfil.tsx).
+  - *Catalog Spinner & Width Lock*: Enhanced the catalog modal inside [estudar.tsx](file:///d:/Projetos/BrainSRS%20v2/mobile/app/%28tabs%29/estudar.tsx) with a local `ActivityIndicator` on the installing card button and set a fixed button size of `110px` to prevent layout resizing.
+
 ## Working Guidelines for Future Agents
 
 - Before editing, read the exact files being changed; this context is a map,
