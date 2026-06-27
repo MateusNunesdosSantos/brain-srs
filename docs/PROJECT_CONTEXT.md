@@ -653,6 +653,21 @@ study feedback:
   - *Modal Status Bar Overlay*: Configured `statusBarTranslucent={true}` on all modal components across study and review screens to ensure dark backdrop overlays fully cover the screen height, including notch and header bars.
   - *Notificações*: Removed the unused bell notification icon from the global mobile `HeaderBar.tsx`.
 
+- **Mobile Review Opt-in & State Sync Corrections (2026-06-26/27)**:
+  - *Review Opt-in Option*: Added an "Adicionar à revisão" toggle/switch in the catalog manage modal (`estudar.tsx`) allowing users to choose if installed trails should queue questions in their Spaced Repetition flow. Disabled this toggle for free plan users as forced by the backend logic.
+  - *Review Filter Correction*: Modified `revisar.tsx` and `index.tsx` `dueQuestions` calculators to load installations and correctly filter out catalog questions that do not have the review opt-in flag enabled (and all catalog questions for free users), preventing start review exceptions.
+  - *Automatic State Synchronization*: Integrated `useFocusEffect` from `expo-router` in `biblioteca.tsx` and `revisar.tsx` to reload locally cached `lastState` automatically whenever the screens receive focus, removing the requirement to log out and log back in to see newly installed trails.
+
+- **Mobile Configurations Screen Refactor (2026-06-27)**:
+  - *Default Tab*: Made the **Conta** (`account`) tab the default tab when accessing settings.
+  - *Algorithmic Save Free Bypass*: Modified backend `requirePro` validation so Free users can save settings (specifically the sound feedback switch) without Pro blocks, provided algorithm variables retain default values.
+  - *Connected Devices Optimization*: Deduplicated connections in the **Segurança** tab, grouping sessions by unique `userAgent` to display active device instances instead of a detailed connection log.
+  - *Support Mailto Configuration*: Updated support submission email redirection to `mateusnunescontas@gmail.com`.
+  - *Data Tab Removal*: Fully removed the data backup/JSON export-import tab from the mobile configurations page.
+  - *React Native CSS-Interop Fixes*: Converted logical `&&` conditional render statements in configurations JSX code to ternary expressions (`? ... : null`) to resolve Expo Metro crashes caused by NativeWind v4's `css-interop` wrapper.
+  - *Dynamic Button Validation Styles*: Integrated the custom `Button` component in configurations tabs, automatically styling buttons as disabled (gray) when inputs are empty, and enabling them (green) when fields are filled.
+  - *Bottom Content Scroll Spacing*: Increased configurations ScrollView padding to `120px` to keep submission buttons fully visible above the bottom tab bar.
+
 ## Working Guidelines for Future Agents
 
 - Before editing, read the exact files being changed; this context is a map,
