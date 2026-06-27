@@ -644,6 +644,15 @@ study feedback:
   - *Duolingo-style Zigzag Trail*: Created a custom `TrailMap` component in React Native using `react-native-svg` and mapped Lucide icons, arranging nodes in an alternating offset zigzag line (`30%`/`50%`/`70%`/`50%`) mimicking the web version.
   - *Study Lesson Player Re-queuing*: Refactored the study lesson player to re-queue incorrect questions by appending them to the end of the active queue. Users must answer all questions correctly to complete the lesson and earn XP. Early exit awards no XP.
 
+- **Mobile Review Polish, Spacing and Layout Enhancements (2026-06-26)**:
+  - *Review Screen Loading State*: Added a loading spinner feedback to the "Começar revisão" button in `revisar.tsx` to handle backend initialization latency.
+  - *Obrigatoriedade de Escolha de Matéria*: Restricted starting review sessions until a specific subject is selected (disabled the start button if `subjectId === 'all'`).
+  - *Dynamic Due Filter*: Filtered review setup selectors to display only subjects and notebooks that actually contain active due questions for review.
+  - *Dynamic Return Interval Info*: Added a next review formatting helper (`formatNextReviewDiff`) to the bottom feedback banner, showing users exactly when the answered question will return (minutes, hours, or days) based on the server response payload.
+  - *Visual Scaling Upgrades*: Scaled up buttons globally (`Button.tsx`), select dropdown menu item trigger heights, option choices, and study lesson player choice boxes to improve touch targets and readability.
+  - *Modal Status Bar Overlay*: Configured `statusBarTranslucent={true}` on all modal components across study and review screens to ensure dark backdrop overlays fully cover the screen height, including notch and header bars.
+  - *Notificações*: Removed the unused bell notification icon from the global mobile `HeaderBar.tsx`.
+
 ## Working Guidelines for Future Agents
 
 - Before editing, read the exact files being changed; this context is a map,
