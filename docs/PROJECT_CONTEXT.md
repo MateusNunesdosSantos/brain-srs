@@ -679,6 +679,15 @@ study feedback:
   - *Dashboard Subjects Filter*: Updated [index.tsx](file:///d:/Projetos/BrainSRS%20v2/mobile/app/%28tabs%29/index.tsx) to only list subjects with a retention rate above 1% in the "Matérias em andamento" section.
   - *Tab Speed Optimizations*: Eliminated full-screen loading spinner blocks during tab switching/refocusing in [index.tsx](file:///d:/Projetos/BrainSRS%20v2/mobile/app/%28tabs%29/index.tsx), [revisar.tsx](file:///d:/Projetos/BrainSRS%20v2/mobile/app/%28tabs%29/revisar.tsx), [estudar.tsx](file:///d:/Projetos/BrainSRS%20v2/mobile/app/%28tabs%29/estudar.tsx), and [desafios.tsx](file:///d:/Projetos/BrainSRS%20v2/mobile/app/%28tabs%29/desafios.tsx). Local cached data is rendered instantly and refreshed silently in the background (stale-while-revalidate pattern).
 
+- **Mobile & Web Ofensiva Streak rules, Session Guard, and Challenges UI Caret (2026-06-28)**:
+  - *Streak Sync & Rules*: Adicionado `lastStudyDate` no Prisma schema. Restruturada lógica do backend de `addXp` para alterar a ofensiva apenas quando `{ isStudy: true }` é passado. Criado helper `syncUserStreak` para resetar automaticamente para 0 caso o dia de estudo expire. Ofensiva sincronizada no login e consultas de autenticação.
+  - *Streak Congrats Modal (Mobile & Web)*: Criado o componente `StreakCongratsModal` em React Native (`estudar.tsx`) e Next.js (`brain-srs-app.tsx`) que toca um som de arpejo de comemoração sintetizado e exibe uma animação na contagem de ofensiva de X para X+1.
+  - *Guarda de Sessão Expirada (Mobile)*: Integrado callback `onUnauthorized` no `client-api.ts` em caso de 401 definitivo, limpando instantaneamente o `AuthProvider` para redirecionar ao login sem travamento de dados cacheados.
+  - *Tickets de Desafio e Estilos de Gaveta (Mobile)*: Adicionado `lastTicketCollected` no tipo `UserProfile`. Desabilitado o botão de resgate diário com texto alterado se já coletado hoje. Gaveta expandida para `minHeight: 280` com overlay escurecido para `0.65` de opacidade.
+  - *Cobertura de Modais*: Habilitado `statusBarTranslucent={true}` em todos os modais de `desafios.tsx` e `rankings.tsx` para cobrir notch e status bar.
+  - *RankCard com Pódio e Navegação (Mobile)*: Atualizado o design do RankCard em `desafios.tsx` com cores personalizadas de ouro, prata e bronze e ícone de medalha para o pódio (1º ao 3º) e verde para demais colocados. Card transformado em `Pressable` que navega para aba de rankings.
+  - *Tab Bar Base Fixa (Mobile)*: Removido estilo flutuante de `visibleTabBarStyle` na tab bar, fixando-a no final da tela para evitar vazamento visual ao rolar.
+
 ## Working Guidelines for Future Agents
 
 - Before editing, read the exact files being changed; this context is a map,
