@@ -686,7 +686,13 @@ study feedback:
   - *Tickets de Desafio e Estilos de Gaveta (Mobile)*: Adicionado `lastTicketCollected` no tipo `UserProfile`. Desabilitado o botão de resgate diário com texto alterado se já coletado hoje. Gaveta expandida para `minHeight: 280` com overlay escurecido para `0.65` de opacidade.
   - *Cobertura de Modais*: Habilitado `statusBarTranslucent={true}` em todos os modais de `desafios.tsx` e `rankings.tsx` para cobrir notch e status bar.
   - *RankCard com Pódio e Navegação (Mobile)*: Atualizado o design do RankCard em `desafios.tsx` com cores personalizadas de ouro, prata e bronze e ícone de medalha para o pódio (1º ao 3º) e verde para demais colocados. Card transformado em `Pressable` que navega para aba de rankings.
-  - *Tab Bar Base Fixa (Mobile)*: Removido estilo flutuante de `visibleTabBarStyle` na tab bar, fixando-a no final da tela para evitar vazamento visual ao rolar.
+- **Mobile Security, Google Fonts, Haptics & Streak Warnings (2026-06-28)**:
+  - *Hardware Token Storage*: Removed AsyncStorage credential fallbacks in [secure-store.ts](file:///d:/Projetos/BrainSRS%20v2/mobile/src/services/secure-store.ts) to force keychain-only storage.
+  - *Encrypted Cache Store*: Implemented XOR-based local cache encryption in [state-store.ts](file:///d:/Projetos/BrainSRS%20v2/mobile/src/services/state-store.ts) using hardware keys saved in `SecureStore` (optimized in 8192-char chunks to prevent stack overflow). Migrated direct AsyncStorage calls to use this service across 12 screens.
+  - *Expo Go Notification Guard*: Conditionally resolved `expo-notifications` via `expo-constants` to prevent native evaluation crashes on Expo Go while keeping reminders on release builds.
+  - *Google Fonts & Tailwind*: Integrated Google Fonts `Manrope` in root [_layout.tsx](file:///d:/Projetos/BrainSRS%20v2/mobile/app/_layout.tsx) and mapped all typography classes (`font-sans`, `font-bold`, etc.) in [tailwind.config.js](file:///d:/Projetos/BrainSRS%20v2/mobile/tailwind.config.js).
+  - *Central Haptics & Interaction*: Added native `expo-haptics` feedback to [feedback-sound.ts](file:///d:/Projetos/BrainSRS%20v2/mobile/src/services/feedback-sound.ts) (Success/Error patterns) and choice selectors in `revisar.tsx`, `estudar.tsx`, and `desafios.tsx`.
+  - *Streak Risk Warning & Animated Modal*: Added `lastStudyDate` to backend `AuthUser` schema and routes. Built [streak-alert.ts](file:///d:/Projetos/BrainSRS%20v2/mobile/src/services/streak-alert.ts) to schedule reminders and trigger a beautiful, pulsing in-app warning Modal in [index.tsx](file:///d:/Projetos/BrainSRS%20v2/mobile/app/%28tabs%29/index.tsx) with a full-screen overlay when the user's streak is in risk.
 
 ## Working Guidelines for Future Agents
 
