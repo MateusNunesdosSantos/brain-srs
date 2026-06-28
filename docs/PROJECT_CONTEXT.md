@@ -665,8 +665,19 @@ study feedback:
   - *Support Mailto Configuration*: Updated support submission email redirection to `mateusnunescontas@gmail.com`.
   - *Data Tab Removal*: Fully removed the data backup/JSON export-import tab from the mobile configurations page.
   - *React Native CSS-Interop Fixes*: Converted logical `&&` conditional render statements in configurations JSX code to ternary expressions (`? ... : null`) to resolve Expo Metro crashes caused by NativeWind v4's `css-interop` wrapper.
-  - *Dynamic Button Validation Styles*: Integrated the custom `Button` component in configurations tabs, automatically styling buttons as disabled (gray) when inputs are empty, and enabling them (green) when fields are filled.
   - *Bottom Content Scroll Spacing*: Increased configurations ScrollView padding to `120px` to keep submission buttons fully visible above the bottom tab bar.
+
+- **Mobile Study Flow, Premium TrailMap Redesign & Performance Tuning (2026-06-27/28)**:
+  - *Study XP Synchronization*: Destructured and called `setUser` inside the catalog completion callback in [estudar.tsx](file:///d:/Projetos/BrainSRS%20v2/mobile/app/%28tabs%29/estudar.tsx), writing the backend-returned user XP to `useAuth` and AsyncStorage `lastState` instantly.
+  - *Lesson Re-queuing Fix*: Fixed a stale closure issue in the study player's auto-advance `setTimeout` by keeping a React ref of `handleContinuePlayer`. Incorrect questions are appended and correctly repeated until answered correctly before completing the lesson.
+  - *Premium TrailMap Overhaul*: Redesigned `TrailMap` to look like a premium 3D gamified map with:
+    - A pulsing halo background (using `Animated`) around the active node.
+    - A bouncing speech bubble pointer tooltip (`"COMEÇAR"`) above the active node.
+    - Thick SVG curves (`8px`) with custom linear gradients and a subtle background map dot grid.
+    - Floating bubble card labels with bottom-border 3D shadows.
+    - Fixed native animated module validation crash by animating `translateY` instead of `top`.
+  - *Dashboard Subjects Filter*: Updated [index.tsx](file:///d:/Projetos/BrainSRS%20v2/mobile/app/%28tabs%29/index.tsx) to only list subjects with a retention rate above 1% in the "Matérias em andamento" section.
+  - *Tab Speed Optimizations*: Eliminated full-screen loading spinner blocks during tab switching/refocusing in [index.tsx](file:///d:/Projetos/BrainSRS%20v2/mobile/app/%28tabs%29/index.tsx), [revisar.tsx](file:///d:/Projetos/BrainSRS%20v2/mobile/app/%28tabs%29/revisar.tsx), [estudar.tsx](file:///d:/Projetos/BrainSRS%20v2/mobile/app/%28tabs%29/estudar.tsx), and [desafios.tsx](file:///d:/Projetos/BrainSRS%20v2/mobile/app/%28tabs%29/desafios.tsx). Local cached data is rendered instantly and refreshed silently in the background (stale-while-revalidate pattern).
 
 ## Working Guidelines for Future Agents
 
