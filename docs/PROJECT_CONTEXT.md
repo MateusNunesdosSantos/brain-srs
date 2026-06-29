@@ -694,6 +694,12 @@ study feedback:
   - *Central Haptics & Interaction*: Added native `expo-haptics` feedback to [feedback-sound.ts](file:///d:/Projetos/BrainSRS%20v2/mobile/src/services/feedback-sound.ts) (Success/Error patterns) and choice selectors in `revisar.tsx`, `estudar.tsx`, and `desafios.tsx`.
   - *Streak Risk Warning & Animated Modal*: Added `lastStudyDate` to backend `AuthUser` schema and routes. Built [streak-alert.ts](file:///d:/Projetos/BrainSRS%20v2/mobile/src/services/streak-alert.ts) to schedule reminders and trigger a beautiful, pulsing in-app warning Modal in [index.tsx](file:///d:/Projetos/BrainSRS%20v2/mobile/app/%28tabs%29/index.tsx) with a full-screen overlay when the user's streak is in risk.
 
+- **Admin Panel Polish, Concurrency Locks & Active Sessions (2026-06-28)**:
+  - *Disabled Starter Seeding*: Completely disabled the starter catalog seeding by making `syncStarterCatalog` in [catalog.ts](file:///d:/Projetos/BrainSRS%20v2/backend/src/catalog.ts) a no-op function that returns immediately, leaving the database catalog control 100% manual. Added a Promise-based lock (`catalogSeedPromise`) to ensure general setup logic does not hit race conditions.
+  - *Active Sessions Modal & Disconnect*: Implemented an in-depth active sessions detail modal in the admin area. Admins can click on the "Sessões" metric card to view all logged-in devices. Each connection decodes the device type from the `userAgent` (e.g. "iPhone", "MacBook / iMac", "Celular Android") and displays the IP address and last access time.
+  - *Single Session Revocation*: Created a POST endpoint `/api/admin/users/:userId/sessions/:sessionId/logout` and the function `logoutTargetUserSession` in the backend. Admins can click "Desconectar" on any specific session in the modal, input an administrative audit reason, and terminate that specific connection immediately in real-time.
+  - *Catalog Editor Select Dropdown*: Replaced the horizontal subjects tabs in [admin-app.tsx](file:///d:/Projetos/BrainSRS%20v2/frontend/src/components/admin/admin-app.tsx) with a styled, responsive select dropdown to display the active subject cleanly without horizontal clipping or scrollbar overlap.
+
 ## Working Guidelines for Future Agents
 
 - Before editing, read the exact files being changed; this context is a map,
